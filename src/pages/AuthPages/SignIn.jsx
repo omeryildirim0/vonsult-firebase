@@ -12,7 +12,9 @@ import {
   Heading,
   Text,
   useColorModeValue,
+  Icon
 } from '@chakra-ui/react';
+import { FcGoogle } from 'react-icons/fc';
 
 export default function SignIn() {
   return (
@@ -60,6 +62,26 @@ export default function SignIn() {
               }}>
               Sign in
             </Button>
+
+            <Flex alignItems={"center"} justifyContent={"center"} my={1} gap={1} w={"full"}>
+						<Box flex={2} h={"1px"} bg={"gray.400"} />
+						<Text mx={1} color={"Black"}>
+							OR
+						</Text>
+						<Box flex={2} h={"1px"} bg={"gray.400"} />
+			</Flex>
+
+            <Button
+                leftIcon={<Icon as={FcGoogle} />}
+                colorScheme="gray"
+                variant="outline"
+                w="full"
+                mt={4}
+      
+            >
+                Sign in with Google
+            </Button>
+
           </Stack>
         </Stack>
       </Box>
