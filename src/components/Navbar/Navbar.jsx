@@ -31,12 +31,14 @@ const Navbar = () => {
       color={color}
       py={2}
       px={4}
-      boxShadow="sm"
-      position="relative"
+      position="sticky" // Make navbar sticky
+      top="0" // Stick to the top of the viewport
+      zIndex="1000" // Ensure it's above other content
+      boxShadow="sm" // Optional: adds a subtle shadow to the navbar
     >
       <Flex align="center">
         <Text fontSize="xl" fontWeight="bold">
-          chakra <span style={{ color: 'blue' }}>PRO</span>
+          Vonsult <span style={{ color: 'blue' }}>PRO</span>
         </Text>
       </Flex>
 
