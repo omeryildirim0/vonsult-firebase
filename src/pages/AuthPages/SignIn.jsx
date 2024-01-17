@@ -15,8 +15,34 @@ import {
   Icon
 } from '@chakra-ui/react';
 import { FcGoogle } from 'react-icons/fc';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+
+
 
 export default function SignIn() {
+
+    const navigate = useNavigate();
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const handleEmailChange = (event) => {
+        setEmail(event.target.value);
+    };
+
+    const handlePasswordChange = (event) => {
+        setPassword(event.target.value);
+    };
+
+    const handleSignIn = () => {
+        if (!email || !password) {
+            alert("Please fill out all the fields.")
+        }
+        navigate("/");
+
+    }
+
   return (
     <Flex
       minH={'100vh'}
@@ -37,12 +63,12 @@ export default function SignIn() {
 
           <FormControl id="email">
             <FormLabel>Email address</FormLabel>
-            <Input type="email" />
+            <Input type="email" onChange={handleEmailChange}/>
           </FormControl>
 
           <FormControl id="password">
             <FormLabel>Password</FormLabel>
-            <Input type="password" />
+            <Input type="password" onChange={handlePasswordChange}/>
           </FormControl>
 
           <Stack spacing={6}>
@@ -59,7 +85,9 @@ export default function SignIn() {
               color={'white'}
               _hover={{
                 bg: 'blue.500',
-              }}>
+              }}
+              onClick={handleSignIn}
+            >
               Sign in
             </Button>
 
