@@ -7,7 +7,7 @@ const Layout = ({ children }) => {
   return (
     <Box minHeight="100vh" display="flex" flexDirection="column">
       <Navbar />
-      <Box flex="1" p={4}>
+      <Box flex="1" p={0}>
         {children}
       </Box>
       <Footer />

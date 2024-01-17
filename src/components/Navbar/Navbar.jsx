@@ -12,8 +12,11 @@ import {
   IconButton,
   useBreakpointValue,
   Collapse,
+  Link
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
+import { Image as ChakraImage } from '@chakra-ui/react';
+import logo from '../../assets/logo.png'
 
 const Navbar = () => {
   const bgColor = useColorModeValue('white', 'gray.800');
@@ -37,9 +40,10 @@ const Navbar = () => {
       boxShadow="sm" // Optional: adds a subtle shadow to the navbar
     >
       <Flex align="center">
-        <Text fontSize="xl" fontWeight="bold">
-          Vonsult 
-        </Text>
+        
+        <Link as={RouterLink} to="/" _hover={{ textDecoration: 'none' }}>
+            Vonsult
+        </Link>
       </Flex>
 
       {/* Mobile Menu Button */}

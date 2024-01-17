@@ -1,11 +1,10 @@
 import React from 'react'
-import Layout from '../../layouts/Layout'
+import HeroSection from '../../components/Hero/Hero'
 
 const HomePage = () => {
   return (
-  
-      <div>Welcome to the Home Page!</div>
-    
+
+    <HeroSection />
   )
 }
 
