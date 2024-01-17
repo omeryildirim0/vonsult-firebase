@@ -38,7 +38,7 @@ const Navbar = () => {
     >
       <Flex align="center">
         <Text fontSize="xl" fontWeight="bold">
-          Vonsult <span style={{ color: 'blue' }}>PRO</span>
+          Vonsult 
         </Text>
       </Flex>
 
@@ -53,21 +53,23 @@ const Navbar = () => {
       )}
 
       {/* Navigation Links */}
-      <Collapse in={!isMobile || isMobileNavOpen} animateOpacity>
+      <Box
+        display={{ base: isMobileNavOpen ? "block" : "none", md: "flex" }}
+        flexBasis={{ base: "100%", md: "auto" }}
+      >
         <Stack
-          direction={{ base: 'column', md: 'row' }}
-          display={{ base: isMobileNavOpen ? 'flex' : 'none', md: 'flex' }}
-          width={{ base: 'full', md: 'auto' }}
-          alignItems="center"
-          flexGrow={1}
-          mt={{ base: 4, md: 0 }}
+          spacing={8}
+          align="center"
+          justify={["center", "space-between", "flex-end", "flex-end"]}
+          direction={["column", "row", "row", "row"]}
+          pt={[4, 4, 0, 0]}
         >
-          <Text mx={2} cursor="pointer">Components</Text>
-          <Text mx={2} cursor="pointer">Pricing</Text>
-          <Text mx={2} cursor="pointer">Marketplace</Text>
-          <Text mx={2} cursor="pointer">Support</Text>
+          <Text cursor="pointer">Components</Text>
+          <Text cursor="pointer">Pricing</Text>
+          <Text cursor="pointer">Marketplace</Text>
+          <Text cursor="pointer">Support</Text>
         </Stack>
-      </Collapse>
+      </Box>
 
       {/* Auth Buttons */}
       <Flex

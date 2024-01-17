@@ -81,11 +81,7 @@ export default function SignIn() {
             </Stack>
 
             <Button
-              bg={'blue.400'}
-              color={'white'}
-              _hover={{
-                bg: 'blue.500',
-              }}
+              colorScheme="blue"
               onClick={handleSignIn}
             >
               Sign in
