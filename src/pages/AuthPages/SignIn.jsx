@@ -45,7 +45,7 @@ export default function SignIn() {
 
   return (
     <Flex
-      minH={'100vh'}
+      minH={'30vh'}
       align={'center'}
       justify={'center'}
       p={4} // Adds padding to avoid edge-to-edge content on small screens

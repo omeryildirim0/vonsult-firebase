@@ -29,7 +29,7 @@ const HeroSection = () => {
         textAlign="center"
         mb="4"
       >
-        Elevate Your Content Creation
+        Innovative Ideas. Smart Solutions. 
       </Heading>
       <Text
         fontSize={{ base: 'md', md: 'lg' }}
@@ -37,11 +37,13 @@ const HeroSection = () => {
         maxW="2xl"
         mb="8"
       >
-        Join our community of professionals to boost your content quality and engage with your audience like never before.
+        Welcome to Vonsult, a new startup that helps aspiring content creators achieve their goals.
+        Our team of experienced coaches will provide you with the tools and guidance you need to succeed. 
+        Contact us to book a session today. 
       </Text>
       <Button
         size={buttonSize}
-        colorScheme="teal"
+        colorScheme="red"
         mb={{ base: '4', md: '8' }}
       >
         Get Started

@@ -1,6 +1,6 @@
 
 import { Link as RouterLink } from 'react-router-dom'
-
+import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import {
   Box,
@@ -22,6 +22,7 @@ const Navbar = () => {
   const bgColor = useColorModeValue('white', 'gray.800');
   const color = useColorModeValue('gray.600', 'white');
   const [isMobileNavOpen, setMobileNavOpen] = React.useState(false);
+  const navigate = useNavigate();
 
   // This will determine if we're on a mobile device based on the breakpoint
   const isMobile = useBreakpointValue({ base: true, md: false });
@@ -68,9 +69,9 @@ const Navbar = () => {
           direction={["column", "row", "row", "row"]}
           pt={[4, 4, 0, 0]}
         >
-          <Text cursor="pointer">Components</Text>
-          <Text cursor="pointer">Pricing</Text>
-          <Text cursor="pointer">Marketplace</Text>
+          <Text cursor="pointer">How it Works</Text>
+          <Text cursor="pointer">Become a Coach</Text>
+          <Text cursor="pointer">Blog</Text>
           <Text cursor="pointer">Support</Text>
         </Stack>
       </Box>
@@ -80,10 +81,12 @@ const Navbar = () => {
         align="center"
         display={{ base: isMobileNavOpen ? 'none' : 'flex', md: 'flex' }}
       >
-        <Button colorScheme="blue" variant="ghost" mr={4}>
+        <Button colorScheme="blue" variant="ghost" mr={4} onClick={() => navigate('/sign-in')}>
           Sign In
         </Button>
-        <Button colorScheme="blue" display={{ base: 'none', md: 'inline-flex' }}>
+        <Button colorScheme="blue" display={{ base: 'none', md: 'inline-flex' }}
+            onClick={() => navigate('/sign-up')}
+        >
           Sign Up
         </Button>
       </Flex>
