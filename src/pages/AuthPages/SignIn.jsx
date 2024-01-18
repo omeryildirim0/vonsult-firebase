@@ -12,6 +12,7 @@ import {
   Heading,
   Text,
   useColorModeValue,
+  useToast,
   Icon
 } from '@chakra-ui/react';
 import { FcGoogle } from 'react-icons/fc';
@@ -26,6 +27,7 @@ export default function SignIn() {
     const navigate = useNavigate();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const toast = useToast();
 
     const handleEmailChange = (event) => {
         setEmail(event.target.value);
@@ -37,9 +39,15 @@ export default function SignIn() {
 
     const handleSignIn = () => {
         if (!email || !password) {
-            alert("Please fill out all the fields.")
+          toast({
+            title: 'Error',
+            description: 'Please fill all the fields',
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+          });
         }
-        navigate("/");
+        
 
     }
 
