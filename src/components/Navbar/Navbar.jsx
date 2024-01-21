@@ -17,12 +17,18 @@ import {
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import { Image as ChakraImage } from '@chakra-ui/react';
 import logo from '../../assets/logo.png'
+import useLogout from "../../hooks/useLogout";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from '../../firebase/firebase';
+
 
 const Navbar = () => {
   const bgColor = useColorModeValue('white', 'gray.800');
   const color = useColorModeValue('gray.600', 'white');
   const [isMobileNavOpen, setMobileNavOpen] = React.useState(false);
   const navigate = useNavigate();
+  const { handleLogout, isLoggingOut } = useLogout();
+  const [authUser] = useAuthState(auth);
 
   // This will determine if we're on a mobile device based on the breakpoint
   const isMobile = useBreakpointValue({ base: true, md: false });
@@ -81,14 +87,23 @@ const Navbar = () => {
         align="center"
         display={{ base: isMobileNavOpen ? 'none' : 'flex', md: 'flex' }}
       >
-        <Button colorScheme="blue" variant="ghost" mr={4} onClick={() => navigate('/sign-in')}>
-          Sign In
-        </Button>
-        <Button colorScheme="blue" display={{ base: 'none', md: 'inline-flex' }}
-            onClick={() => navigate('/sign-up')}
-        >
+        {authUser ? (
+          <Button colorScheme="blue" onClick={handleLogout}>
+            Log Out
+          </Button>
+        ) : (
+          <>
+          <Button colorScheme="blue" variant="ghost" mr={4} onClick={() => navigate('/sign-in')}>
+            Sign In
+          </Button>
+          <Button colorScheme="blue" display={{ base: 'none', md: 'inline-flex' }}
+              onClick={() => navigate('/sign-up')}
+          >
           Sign Up
         </Button>
+        </>
+        )}
+        
       </Flex>
     </Flex>
   );
