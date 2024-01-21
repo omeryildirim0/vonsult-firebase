@@ -12,6 +12,8 @@ import {
   useToast,
   Text,
   Icon,
+  useColorModeValue,
+  Flex,
 } from '@chakra-ui/react';
 import { FcGoogle } from 'react-icons/fc'; // Importing a placeholder Google icon
 import useSignUpWithEmailAndPassword from '../../hooks/useSignUpWithEmailAndPassword';
@@ -35,9 +37,17 @@ const SignUp = () => {
 
 
   return (
-    <ChakraProvider theme={theme}>
-      <Grid minH="30vh" pt={10} p={3} justifyContent="center" alignItems="start">
-        <Box w={{ base: 'full', md: '450px'}} p={4} borderWidth="1px" borderRadius="lg" overflow="hidden">
+    <Flex
+    minH={'30vh'}
+    align={'center'}
+    justify={'center'}
+    p={4} // Adds padding to avoid edge-to-edge content on small screens
+    bg={useColorModeValue('gray.50', 'gray.800')}>
+
+      
+        <Box w={{ base: 'full', md: '450px'}} p={4} borderWidth="1px" borderRadius="lg" overflow="hidden"
+          bg={useColorModeValue('white', 'gray.700')}
+        >
           <Text fontSize="2xl" mb={4} fontWeight="bold" textAlign="center">
             Sign Up
           </Text>
@@ -67,8 +77,8 @@ const SignUp = () => {
             </Button>
           </VStack>
         </Box>
-      </Grid>
-    </ChakraProvider>
+      
+    </Flex>
   );
 };
 
