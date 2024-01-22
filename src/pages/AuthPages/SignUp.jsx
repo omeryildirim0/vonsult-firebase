@@ -17,7 +17,7 @@ import {
 } from '@chakra-ui/react';
 import { FcGoogle } from 'react-icons/fc'; // Importing a placeholder Google icon
 import useSignUpWithEmailAndPassword from '../../hooks/useSignUpWithEmailAndPassword';
-
+import GoogleAuth from './GoogleAuth';
 
 const SignUp = () => {
   
@@ -31,10 +31,10 @@ const SignUp = () => {
 	});
   
   const { loading, error, signup } = useSignUpWithEmailAndPassword();
-
+  
   const toast = useToast();
 
-
+  
 
   return (
     <Flex
@@ -70,11 +70,7 @@ const SignUp = () => {
             >
               Sign Up
             </Button>
-            <Button leftIcon={<Icon as={FcGoogle} />} variant="outline" colorScheme="gray" width="full"
-              
-            >
-              Sign Up with Google
-            </Button>
+            <GoogleAuth prefix={"Sign up"} />
           </VStack>
         </Box>
       

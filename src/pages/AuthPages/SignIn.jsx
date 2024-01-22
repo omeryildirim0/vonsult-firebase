@@ -21,7 +21,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useLogin from '../../hooks/useLogin';
-
+import GoogleAuth from "./GoogleAuth";
 
 
 
@@ -34,7 +34,7 @@ export default function SignIn() {
     });
     const toast = useToast();
     const { loading, error, login } = useLogin();
-
+   
     
 
   return (
@@ -97,16 +97,7 @@ export default function SignIn() {
 						<Box flex={2} h={"1px"} bg={"gray.400"} />
 			</Flex>
 
-            <Button
-                leftIcon={<Icon as={FcGoogle} />}
-                colorScheme="gray"
-                variant="outline"
-                w="full"
-                mt={4}
-      
-            >
-                Sign in with Google
-            </Button>
+            <GoogleAuth prefix={"Sign in"} />
 
           </Stack>
         </Stack>
