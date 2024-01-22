@@ -43,14 +43,16 @@ export default function SignIn() {
       align={'center'}
       justify={'center'}
       p={4} // Adds padding to avoid edge-to-edge content on small screens
-      bg={useColorModeValue('gray.50', 'gray.800')}>
+      bg={useColorModeValue('gray.50', 'gray.800')}
+    >
       
       <Box
         w={{ base: 'full', md: '450px'}} // Full width on small screens, fixed width on medium and up
         rounded={'lg'}
         bg={useColorModeValue('white', 'gray.700')}
         boxShadow={'lg'}
-        p={8}>
+        p={8}
+      >
         
         <Stack spacing={4}>
           <Heading fontSize={'2xl'} textAlign="center">Sign in to your account</Heading>
@@ -90,12 +92,12 @@ export default function SignIn() {
             </Button>
 
             <Flex alignItems={"center"} justifyContent={"center"} my={1} gap={1} w={"full"}>
-						<Box flex={2} h={"1px"} bg={"gray.400"} />
-						<Text mx={1} color={"Black"}>
-							OR
-						</Text>
-						<Box flex={2} h={"1px"} bg={"gray.400"} />
-			</Flex>
+              <Box flex={2} h={"1px"} bg={"gray.400"} />
+              <Text mx={1} color={"Black"}>
+                OR
+              </Text>
+              <Box flex={2} h={"1px"} bg={"gray.400"} />
+			      </Flex>
 
             <GoogleAuth prefix={"Sign in"} />
 

@@ -45,7 +45,11 @@ const SignUp = () => {
     bg={useColorModeValue('gray.50', 'gray.800')}>
 
       
-        <Box w={{ base: 'full', md: '450px'}} p={4} borderWidth="1px" borderRadius="lg" overflow="hidden"
+        <Box 
+          w={{ base: 'full', md: '450px'}} 
+          p={4} borderWidth="1px" 
+          borderRadius="lg" 
+          overflow="hidden"
           bg={useColorModeValue('white', 'gray.700')}
         >
           <Text fontSize="2xl" mb={4} fontWeight="bold" textAlign="center">
@@ -70,7 +74,19 @@ const SignUp = () => {
             >
               Sign Up
             </Button>
-            <GoogleAuth prefix={"Sign up"} />
+
+            <Flex alignItems={"center"} justifyContent={"center"} my={1} gap={1} w={"full"}>
+						<Box flex={2} h={"1px"} bg={"gray.400"} />
+						<Text mx={1} color={"Black"}>
+							OR
+						</Text>
+						<Box flex={2} h={"1px"} bg={"gray.400"} />
+            </Flex>
+
+            <Flex alignItems={"center"} justifyContent={"center"} my={1} gap={1} w={"full"}>
+              <GoogleAuth prefix={"Sign up"} />
+            </Flex>
+    
           </VStack>
         </Box>
       

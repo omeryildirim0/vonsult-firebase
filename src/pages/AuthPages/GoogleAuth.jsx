@@ -50,14 +50,13 @@ const GoogleAuth = ({ prefix }) => {
 	};
 
 	return (
-		<Flex alignItems={"center"} justifyContent={"center"} cursor={"pointer"} onClick={handleGoogleAuth}>
+		<Flex alignItems={"center"} justifyContent={"center"} onClick={handleGoogleAuth}>
 			<Button
                 leftIcon={<Icon as={FcGoogle} />}
                 colorScheme="gray"
                 variant="outline"
-                w="full"
-                mt={4}
-                
+                width="full"
+                mt={1}
             >
                 {prefix} with Google
             </Button>
