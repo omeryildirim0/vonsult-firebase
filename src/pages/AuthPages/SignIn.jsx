@@ -13,11 +13,14 @@ import {
   Text,
   useColorModeValue,
   useToast,
-  Icon
+  Icon,
+  Alert, 
+  AlertIcon,
 } from '@chakra-ui/react';
 import { FcGoogle } from 'react-icons/fc';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useLogin from '../../hooks/useLogin';
 
 
 
@@ -25,31 +28,14 @@ import { useNavigate } from 'react-router-dom';
 export default function SignIn() {
 
     const navigate = useNavigate();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [inputs, setInputs] = useState({
+      email: "",
+      password: "",
+    });
     const toast = useToast();
+    const { loading, error, login } = useLogin();
 
-    const handleEmailChange = (event) => {
-        setEmail(event.target.value);
-    };
-
-    const handlePasswordChange = (event) => {
-        setPassword(event.target.value);
-    };
-
-    const handleSignIn = () => {
-        if (!email || !password) {
-          toast({
-            title: 'Error',
-            description: 'Please fill all the fields',
-            status: 'error',
-            duration: 5000,
-            isClosable: true,
-          });
-        }
-        
-
-    }
+    
 
   return (
     <Flex
@@ -71,12 +57,12 @@ export default function SignIn() {
 
           <FormControl id="email">
             <FormLabel>Email address</FormLabel>
-            <Input type="email" onChange={handleEmailChange}/>
+            <Input type="email" onChange={(e) => setInputs({ ...inputs, email: e.target.value })}/>
           </FormControl>
 
           <FormControl id="password">
             <FormLabel>Password</FormLabel>
-            <Input type="password" onChange={handlePasswordChange}/>
+            <Input type="password" onChange={(e) => setInputs({ ...inputs, password: e.target.value })}/>
           </FormControl>
 
           <Stack spacing={6}>
@@ -84,13 +70,21 @@ export default function SignIn() {
               direction={{ base: 'column', sm: 'row' }} // Stack direction changes based on screen size
               align={'start'}
               justify={'space-between'}>
-              <Link color={'green.400'}>Sign Up</Link>
+              <Link color={'green.400'} onClick={()=> navigate('/sign-up')}>Sign Up</Link>
               <Link color={'blue.400'}>Forgot password?</Link>
             </Stack>
+            {error && (
+              <Alert status='error' fontSize={13} p={2} borderRadius={4}>
+                <AlertIcon fontSize={12} />
+                {error.message}
+              </Alert>
+			      )}
 
             <Button
               colorScheme="blue"
-              onClick={handleSignIn}
+              isLoading={loading}
+
+              onClick={() => login(inputs)}
             >
               Sign in
             </Button>

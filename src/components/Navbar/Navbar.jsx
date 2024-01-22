@@ -85,7 +85,7 @@ const Navbar = () => {
       {/* Auth Buttons */}
       <Flex
         align="center"
-        display={{ base: isMobileNavOpen ? 'none' : 'flex', md: 'flex' }}
+        display={{ base:'flex', md: 'flex' }}
       >
         {authUser ? (
           <Button colorScheme="blue" onClick={handleLogout}>
