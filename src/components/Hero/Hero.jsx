@@ -29,24 +29,23 @@ const HeroSection = () => {
         textAlign="center"
         mb="4"
       >
-        Innovative Ideas. Smart Solutions. 
+        Welcome to Vonsult
       </Heading>
       <Text
         fontSize={{ base: 'md', md: 'lg' }}
         textAlign="center"
         maxW="2xl"
         mb="8"
+        fontWeight="bold"
       >
-        Welcome to Vonsult, a new startup that helps aspiring content creators achieve their goals.
-        Our team of experienced coaches will provide you with the tools and guidance you need to succeed. 
-        Contact us to book a session today. 
+        We are a new startup where you can book 1-on-1 sessions with renowned experts from different fields and ask them questions to get help.
       </Text>
       <Button
         size={buttonSize}
-        colorScheme="red"
+        colorScheme="yellow"
         mb={{ base: '4', md: '8' }}
       >
-        Get Started
+        Find an Expert
       </Button>
     </Flex>
   );

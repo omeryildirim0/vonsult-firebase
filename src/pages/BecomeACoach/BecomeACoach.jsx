@@ -13,11 +13,12 @@ import {
   Text,
   Icon,
   useColorModeValue,
+  Textarea,
   Flex,
 } from '@chakra-ui/react';
 import { FcGoogle } from 'react-icons/fc'; // Importing a placeholder Google icon
 import useSignUpWithEmailAndPassword from '../../hooks/useSignUpWithEmailAndPassword';
-import GoogleAuth from './GoogleAuth';
+
 
 const SignUp = () => {
   
@@ -27,7 +28,7 @@ const SignUp = () => {
 		username: "",
 		email: "",
 		password: "",
-    confirmPassword: ""
+        bio: ""
 	});
   
   const { loading, error, signup } = useSignUpWithEmailAndPassword();
@@ -53,7 +54,7 @@ const SignUp = () => {
           bg={useColorModeValue('white', 'gray.700')}
         >
           <Text fontSize="2xl" mb={4} fontWeight="bold" textAlign="center">
-            Sign Up
+            Join Vonsult as a Coach and Monetize Your Audience
           </Text>
           <Stack spacing={4} align="flex-start">
             <FormControl id="full-name" isRequired>
@@ -68,24 +69,27 @@ const SignUp = () => {
               <FormLabel>Password</FormLabel>
               <Input type="password" value={inputs.password} onChange={(e) => setInputs({ ...inputs, password: e.target.value })} />
             </FormControl>
+            <FormControl id="bio" isRequired>
+                <FormLabel>Bio</FormLabel>
+                <Textarea
+                    placeholder="Tell us about your achievements"
+                    name="bio"
+                    value={inputs.bio}
+                    onChange={(e) => setInputs({ ...inputs, bio: e.target.value })}
+                    size="sm"
+                />
+            </FormControl>
+            
             
             <Button colorScheme="blue" width="full" 
               onClick={() => signup(inputs)}
             >
-              Sign Up
+              Join as a Coach
             </Button>
 
-            <Flex alignItems={"center"} justifyContent={"center"} my={1} gap={1} w={"full"}>
-						<Box flex={2} h={"1px"} bg={"gray.400"} />
-						<Text mx={1} color={"Black"}>
-							OR
-						</Text>
-						<Box flex={2} h={"1px"} bg={"gray.400"} />
-            </Flex>
+        
 
-            <Flex alignItems={"center"} justifyContent={"center"} my={1} gap={1} w={"full"}>
-              <GoogleAuth prefix={"Sign up"} />
-            </Flex>
+            
     
           </Stack>
         </Box>

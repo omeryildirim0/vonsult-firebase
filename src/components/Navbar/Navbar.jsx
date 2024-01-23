@@ -76,9 +76,11 @@ const Navbar = () => {
           pt={[4, 4, 0, 0]}
         >
           <Text cursor="pointer">How it Works</Text>
-          <Text cursor="pointer">Become a Coach</Text>
+          <Text cursor="pointer"
+            onClick={() => navigate('/become-a-coach')}
+          >Become a Coach</Text>
           <Text cursor="pointer">Blog</Text>
-          <Text cursor="pointer">Support</Text>
+         
         </Stack>
       </Box>
 

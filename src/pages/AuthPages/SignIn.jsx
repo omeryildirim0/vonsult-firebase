@@ -75,6 +75,7 @@ export default function SignIn() {
               <Link color={'green.400'} onClick={()=> navigate('/sign-up')}>Sign Up</Link>
               <Link color={'blue.400'}>Forgot password?</Link>
             </Stack>
+            
             {error && (
               <Alert status='error' fontSize={13} p={2} borderRadius={4}>
                 <AlertIcon fontSize={12} />
