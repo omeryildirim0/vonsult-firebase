@@ -18,7 +18,7 @@ import {
 } from '@chakra-ui/react';
 import { FcGoogle } from 'react-icons/fc'; // Importing a placeholder Google icon
 import useSignUpWithEmailAndPassword from '../../hooks/useSignUpWithEmailAndPassword';
-
+import useSignUpCoachesWithEmail from '../../hooks/useSignUpCoachesWithEmail'
 
 const SignUp = () => {
   
@@ -31,7 +31,7 @@ const SignUp = () => {
         bio: ""
 	});
   
-  const { loading, error, signup } = useSignUpWithEmailAndPassword();
+  const { loading, error, signup } = useSignUpCoachesWithEmail();
   
   const toast = useToast();
 
