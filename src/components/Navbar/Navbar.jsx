@@ -29,6 +29,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { handleLogout, isLoggingOut } = useLogout();
   const [authUser] = useAuthState(auth);
+  const userDoc = JSON.parse(localStorage.getItem("user-info"));
 
   // This will determine if we're on a mobile device based on the breakpoint
   const isMobile = useBreakpointValue({ base: true, md: false });
@@ -79,7 +80,8 @@ const Navbar = () => {
           <Text cursor="pointer"
             onClick={() => navigate('/become-a-coach')}
           >Become a Coach</Text>
-          <Text cursor="pointer">Blog</Text>
+          <Text cursor="pointer">Blog</Text> 
+          
          
         </Stack>
       </Box>

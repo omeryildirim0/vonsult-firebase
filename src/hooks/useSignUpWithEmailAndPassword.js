@@ -29,7 +29,7 @@ const useSignUpWithEmailAndPassword = () => {
 					email: inputs.email,
 				
 					fullName: inputs.fullName,
-					bio: "",
+					userType: "user",
 					profilePicURL: "",
 					followers: [],
 					following: [],
