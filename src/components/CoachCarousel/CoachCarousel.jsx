@@ -8,7 +8,7 @@ const CoachCarousel = () => {
   const [coaches, setCoaches] = useState([]);
 
   useEffect(() => {
-        const fetchData = async () => {
+    const fetchData = async () => {
         const querySnapshot = await getDocs(collection(firestore, "coaches"));
         const coachesData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setCoaches(coachesData);
@@ -18,7 +18,10 @@ const CoachCarousel = () => {
   }, []);
 
   return (
-    <Flex direction="row" overflowX="scroll">
+    <Flex 
+        direction="row" 
+        overflowX="scroll"
+    >
       {coaches.map(coach => (
         <CoachCard key={coach.id} name={coach.fullName} bio={coach.bio} imageUrl={coach.profilePicURL} />
       ))}

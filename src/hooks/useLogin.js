@@ -22,6 +22,13 @@ const useLogin = () => {
 				localStorage.setItem("user-info", JSON.stringify(docSnap.data()));
 				loginUser(docSnap.data());
 			}
+			if (userCred) {
+				const docRef = doc(firestore, "coaches", userCred.user.uid);
+				const docSnap = await getDoc(docRef);
+				localStorage.setItem("user-info", JSON.stringify(docSnap.data()));
+				loginUser(docSnap.data());
+			}
+
 		} catch (error) {
 			showToast("Error", error.message, "error");
 		}
