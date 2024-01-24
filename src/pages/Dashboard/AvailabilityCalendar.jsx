@@ -14,30 +14,67 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+  HStack,
+  Tag,
+  TagLabel,
+  TagCloseButton,
 } from '@chakra-ui/react';
 import 'react-calendar/dist/Calendar.css';
-import TimePicker from 'react-time-picker';
+
+const TimeSlotSelector = ({ onSelectSlot }) => {
+    // Generate time slots from 9 AM to 5 PM
+    const generateTimeSlots = () => {
+      const slots = [];
+      for (let hour = 9; hour <= 16; hour++) { // 4 PM is the last starting slot
+        const startHour = hour === 12 ? 12 : hour % 12; // Convert 24h to 12h format
+        const endHour = startHour + 1 > 12 ? 1 : startHour + 1;
+        const startPeriod = hour >= 12 ? 'PM' : 'AM';
+        const endPeriod = hour + 1 >= 12 ? 'PM' : 'AM';
+  
+        slots.push(`${startHour}:00 ${startPeriod} - ${endHour}:00 ${endPeriod}`);
+      }
+      return slots;
+    };
+  
+    const timeSlots = generateTimeSlots();
+  
+    return (
+      <VStack spacing={4}>
+        {timeSlots.map((slot, index) => (
+          <Button key={index} onClick={() => onSelectSlot(slot)} size="sm">
+            {slot}
+          </Button>
+        ))}
+      </VStack>
+    );
+  };
 
 const AvailabilityCalendar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [availabilities, setAvailabilities] = useState([]);
-  const [selectedDay, setSelectedDay] = useState(new Date());
-  const [startTime, setStartTime] = useState('10:00');
-  const [endTime, setEndTime] = useState('11:00');
+  const [selectedDay, setSelectedDay] = useState(null);
+  const [dailySlots, setDailySlots] = useState([]);
 
   const handleDayClick = (value, event) => {
     setSelectedDay(value);
+    const existingSlots = availabilities.find(avail => avail.date === value.toISOString().split('T')[0]);
+    setDailySlots(existingSlots ? existingSlots.timeSlots : []);
     onOpen();
+  };
+
+  const addTimeSlot = (slot) => {
+    if (!dailySlots.includes(slot)) {
+      setDailySlots([...dailySlots, slot]);
+    }
+  };
+
+  const removeTimeSlot = (slot) => {
+    setDailySlots(dailySlots.filter(s => s !== slot));
   };
 
   const saveAvailability = () => {
     const dateStr = selectedDay.toISOString().split('T')[0];
-    const newAvailability = {
-      date: dateStr,
-      timeSlots: [{ start: startTime, end: endTime }]
-    };
-    
-    setAvailabilities([...availabilities, newAvailability]);
+    setAvailabilities([...availabilities.filter(avail => avail.date !== dateStr), { date: dateStr, timeSlots: dailySlots }]);
     onClose();
   };
 
@@ -55,17 +92,18 @@ const AvailabilityCalendar = () => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Select Timeframe</ModalHeader>
+          <ModalHeader>Select Time Slots</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <TimePicker
-              onChange={setStartTime}
-              value={startTime}
-            />
-            <TimePicker
-              onChange={setEndTime}
-              value={endTime}
-            />
+            <TimeSlotSelector onSelectSlot={addTimeSlot} />
+            <VStack spacing={4} align="stretch" mt={4}>
+              {dailySlots.map((slot, index) => (
+                <Tag size="lg" key={index} borderRadius="full">
+                  <TagLabel>{slot}</TagLabel>
+                  <TagCloseButton onClick={() => removeTimeSlot(slot)} />
+                </Tag>
+              ))}
+            </VStack>
           </ModalBody>
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={saveAvailability}>
@@ -78,10 +116,13 @@ const AvailabilityCalendar = () => {
       <Box mt={4}>
         <Text fontSize="xl" mb={2}>Availabilities:</Text>
         {availabilities.map(avail => (
-          <Box key={avail.date}>
+          <Box key={avail.date} p={2} border="1px solid" borderColor="gray.200" borderRadius="md">
             <Text fontWeight="bold">{avail.date}</Text>
             {avail.timeSlots.map((slot, index) => (
-              <Text key={index}>{`${slot.start} - ${slot.end}`}</Text>
+              <Tag size="md" key={index} borderRadius="full" m={1}>
+                <TagLabel>{slot}</TagLabel>
+                <TagCloseButton onClick={() => removeTimeSlot(slot)} />
+              </Tag>
             ))}
           </Box>
         ))}
