@@ -90,7 +90,13 @@ const AvailabilityCalendar = () => {
   };
 
   const handleSave = () => {
-    storeAvailability(coachId, availabilities);
+    const flatAvailabilities = availabilities.reduce((acc, current) => {
+      const { date, timeSlots } = current;
+      const formattedSlots = timeSlots.map(slot => ({ date, slot }));
+      return [...acc, ...formattedSlots];
+    }, []);
+  
+    storeAvailability(coachId, flatAvailabilities);
   };
 
   return (
@@ -122,7 +128,7 @@ const AvailabilityCalendar = () => {
           </ModalBody>
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={saveAvailability}>
-              Save
+              Add
             </Button>
             <Button variant="ghost" onClick={onClose}>Cancel</Button>
           </ModalFooter>
@@ -147,6 +153,7 @@ const AvailabilityCalendar = () => {
             onClick={handleSave} 
             isLoading={isSaving} 
             colorScheme="blue"
+            mb={4}
         >
             Save Availability
         </Button>
