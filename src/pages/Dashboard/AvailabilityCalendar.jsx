@@ -19,7 +19,13 @@ import {
   TagLabel,
   TagCloseButton,
 } from '@chakra-ui/react';
+import useStoreAvailability from '../../hooks/useStoreAvailability';
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from '../../firebase/firebase';
 import 'react-calendar/dist/Calendar.css';
+
+
+
 
 const TimeSlotSelector = ({ onSelectSlot }) => {
     // Generate time slots from 9 AM to 5 PM
@@ -54,6 +60,11 @@ const AvailabilityCalendar = () => {
   const [availabilities, setAvailabilities] = useState([]);
   const [selectedDay, setSelectedDay] = useState(null);
   const [dailySlots, setDailySlots] = useState([]);
+  const { isSaving, error, storeAvailability } = useStoreAvailability();
+  const [authUser] = useAuthState(auth);
+  const userDoc = JSON.parse(localStorage.getItem("user-info"));
+  const coachId = userDoc.uid;
+
 
   const handleDayClick = (value, event) => {
     setSelectedDay(value);
@@ -76,6 +87,10 @@ const AvailabilityCalendar = () => {
     const dateStr = selectedDay.toISOString().split('T')[0];
     setAvailabilities([...availabilities.filter(avail => avail.date !== dateStr), { date: dateStr, timeSlots: dailySlots }]);
     onClose();
+  };
+
+  const handleSave = () => {
+    storeAvailability(coachId, availabilities);
   };
 
   return (
@@ -127,6 +142,16 @@ const AvailabilityCalendar = () => {
           </Box>
         ))}
       </Box>
+     
+        <Button 
+            onClick={handleSave} 
+            isLoading={isSaving} 
+            colorScheme="blue"
+        >
+            Save Availability
+        </Button>
+        {error && <p>Error saving data: {error.message}</p>}
+    
     </VStack>
   );
 };

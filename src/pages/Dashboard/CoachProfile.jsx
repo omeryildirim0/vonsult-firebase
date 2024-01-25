@@ -1,4 +1,4 @@
-// ProfileSection.js
+// CoachProfile.js
 import React from 'react';
 import {
   Box,
@@ -18,10 +18,9 @@ const CoachProfile = () => {
         bg={cardBg} 
         boxShadow="sm" 
         borderRadius="lg" 
-        p={5} 
-        m={5} 
+        p={[3, 4, 5]} // Responsive padding
+        m={[3, 4, 5]}
         textAlign="center"
-    
     >
       <VStack spacing={4}>
         <Image
@@ -43,3 +42,4 @@ const CoachProfile = () => {
 };
 
 export default CoachProfile;
+

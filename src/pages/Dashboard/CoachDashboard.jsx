@@ -5,11 +5,11 @@ import AvailabilityCalendar from './AvailabilityCalendar'
 const CoachDashboard = () => {
   return (
     
-    <VStack spacing={8}>
+    <VStack spacing={8} w="full">
        <CoachProfile />
         <AvailabilityCalendar />
       
-  </VStack>
+    </VStack>
   )
 }
 
