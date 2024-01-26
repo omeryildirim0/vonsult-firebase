@@ -85,9 +85,18 @@ const AvailabilityCalendar = () => {
 
   const saveAvailability = () => {
     const dateStr = selectedDay.toISOString().split('T')[0];
-    setAvailabilities([...availabilities.filter(avail => avail.date !== dateStr), { date: dateStr, timeSlots: dailySlots }]);
+    const existingAvailability = availabilities.find(avail => avail.date === dateStr);
+  
+    if (existingAvailability) {
+      existingAvailability.timeSlots = [...new Set([...existingAvailability.timeSlots, ...dailySlots])];
+      setAvailabilities([...availabilities]);
+    } else {
+      setAvailabilities([...availabilities, { date: dateStr, timeSlots: dailySlots }]);
+    }
+  
     onClose();
   };
+  
 
   const handleSave = () => {
     const flatAvailabilities = availabilities.reduce((acc, current) => {

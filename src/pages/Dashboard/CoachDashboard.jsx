@@ -6,8 +6,8 @@ const CoachDashboard = () => {
   return (
     
     <VStack spacing={8} w="full">
-       <CoachProfile />
-        <AvailabilityCalendar />
+      <CoachProfile />
+      <AvailabilityCalendar />
       
     </VStack>
   )
