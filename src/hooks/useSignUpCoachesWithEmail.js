@@ -31,7 +31,6 @@ const useSignUpWithEmailAndPassword = () => {
 					bio: inputs.bio,
 					userType: "coach",
 					profilePicURL: "",
-					availability: [],
 					followers: [],
 					following: [],
 					posts: [],
