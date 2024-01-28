@@ -23,7 +23,7 @@ import useStoreAvailability from '../../hooks/useStoreAvailability';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from '../../firebase/firebase';
 import 'react-calendar/dist/Calendar.css';
-
+import useFetchAvailability from '../../hooks/useFetchAvailability';
 
 const TimeSlotSelector = ({ onSelectSlot }) => {
     // Generate time slots from 9 AM to 5 PM
@@ -63,6 +63,7 @@ const AvailabilityCalendar = () => {
   const userDoc = JSON.parse(localStorage.getItem("user-info"));
   const coachId = userDoc.uid;
   const [error, setError] = useState(null);
+  const { fetchedAvailabilities, isLoadingAvailabilities, fetchError } = useFetchAvailability(coachId);
 
 
 
@@ -151,11 +152,30 @@ const AvailabilityCalendar = () => {
       </Modal>
       
       <Box mt={4}>
-        <Text fontSize="xl" mb={2}>Availabilities:</Text>
-        
+        <Text fontSize="xl" mb={2}>Coach's Availabilities:</Text>
+        {isLoadingAvailabilities ? (
+          <Text>Loading...</Text>
+        ) : fetchError ? (
+          <Text color="red.500">Error: {fetchError.message}</Text>
+        ) : (
+          fetchedAvailabilities.map((availability) => (
+            <Box key={availability.id} p={2} border="1px solid" borderColor="gray.200" borderRadius="md">
+              <Text fontWeight="bold">{new Date(availability.id).toLocaleDateString()}</Text>
+              <HStack wrap="wrap" spacing={4}>
+                {availability.timeSlots.map((timeSlot, index) => (
+                  <Tag size="md" key={index} borderRadius="full" m={1}>
+                    <TagLabel>{timeSlot}</TagLabel>
+                  </Tag>
+                ))}
+              </HStack>
+            </Box>
+          ))
+        )}
       </Box>
+
+
+
      
-        
     
     </VStack>
   );
