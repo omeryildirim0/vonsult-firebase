@@ -63,7 +63,7 @@ const AvailabilityCalendar = () => {
   const userDoc = JSON.parse(localStorage.getItem("user-info"));
   const coachId = userDoc.uid;
   const [error, setError] = useState(null);
-  const { fetchedAvailabilities, isLoadingAvailabilities, fetchError } = useFetchAvailability(coachId);
+  const { fetchedAvailabilities, isLoadingAvailabilities, fetchError, refetch } = useFetchAvailability(coachId);
 
 
 
@@ -94,6 +94,8 @@ const AvailabilityCalendar = () => {
     try {
       // Store the new availabilities in Firestore
       await storeAvailability(coachId, newAvailabilities);
+      // Refetch the availabilities to update the local state
+      refetch();
       // Clear the daily slots after successful storage
       setDailySlots([]);
       // Close the modal after successful storage

@@ -14,31 +14,33 @@ const useFetchAvailability = (coachId) => {
     return newDate;
   };
 
-  useEffect(() => {
-    const fetchAvailability = async () => {
-      setIsLoadingAvailabilities(true);
-      try {
-        const q = query(collection(firestore, 'coaches', coachId, 'availability'));
-        const querySnapshot = await getDocs(q);
-        const availabilities = [];
-        querySnapshot.forEach((doc) => {
-          const localDate = utcToLocalDate(doc.id);
-          availabilities.push({ id: localDate, ...doc.data() });
-        });
-        setFetchedAvailabilities(availabilities);
-      } catch (err) {
-        setFetchError(err);
-      } finally {
-        setIsLoadingAvailabilities(false);
-      }
-    };
+  const fetchAvailability = async () => {
+    setIsLoadingAvailabilities(true);
+    setFetchError(null);
+    try {
+      const q = query(collection(firestore, 'coaches', coachId, 'availability'));
+      const querySnapshot = await getDocs(q);
+      const availabilities = [];
+      querySnapshot.forEach((doc) => {
+        const localDate = utcToLocalDate(doc.id);
+        availabilities.push({ id: localDate, ...doc.data() });
+      });
+      setFetchedAvailabilities(availabilities);
+    } catch (err) {
+      setFetchError(err);
+    } finally {
+      setIsLoadingAvailabilities(false);
+    }
+  };
 
+  useEffect(() => {
     if (coachId) {
       fetchAvailability();
     }
   }, [coachId]);
 
-  return { fetchedAvailabilities, isLoadingAvailabilities, fetchError };
+  // Return the refetch function along with the other state
+  return { fetchedAvailabilities, isLoadingAvailabilities, fetchError, refetch: fetchAvailability };
 };
 
 export default useFetchAvailability;
