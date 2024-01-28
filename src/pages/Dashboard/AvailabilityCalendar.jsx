@@ -1,4 +1,4 @@
-// AvailabilityCalendar.js
+// AvailabilityCalendar.jsx
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import {
@@ -23,8 +23,6 @@ import useStoreAvailability from '../../hooks/useStoreAvailability';
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from '../../firebase/firebase';
 import 'react-calendar/dist/Calendar.css';
-
-
 
 
 const TimeSlotSelector = ({ onSelectSlot }) => {
@@ -60,13 +58,16 @@ const AvailabilityCalendar = () => {
   const [availabilities, setAvailabilities] = useState([]);
   const [selectedDay, setSelectedDay] = useState(null);
   const [dailySlots, setDailySlots] = useState([]);
-  const { isSaving, error, storeAvailability } = useStoreAvailability();
+  const { isSaving, error: storeError, storeAvailability } = useStoreAvailability();
   const [authUser] = useAuthState(auth);
   const userDoc = JSON.parse(localStorage.getItem("user-info"));
   const coachId = userDoc.uid;
+  const [error, setError] = useState(null);
+
 
 
   const handleDayClick = (value, event) => {
+    setError(null); 
     setSelectedDay(value);
     const existingSlots = availabilities.find(avail => avail.date === value.toISOString().split('T')[0]);
     setDailySlots(existingSlots ? existingSlots.timeSlots : []);
@@ -83,30 +84,26 @@ const AvailabilityCalendar = () => {
     setDailySlots(dailySlots.filter(s => s !== slot));
   };
 
-  const saveAvailability = () => {
+  const saveAvailability = async () => {
+    setError(null);
     const dateStr = selectedDay.toISOString().split('T')[0];
-    const existingAvailability = availabilities.find(avail => avail.date === dateStr);
+    // Create an array of availability objects with the date and slot
+    const newAvailabilities = dailySlots.map(slot => ({ date: dateStr, slot }));
   
-    if (existingAvailability) {
-      existingAvailability.timeSlots = [...new Set([...existingAvailability.timeSlots, ...dailySlots])];
-      setAvailabilities([...availabilities]);
-    } else {
-      setAvailabilities([...availabilities, { date: dateStr, timeSlots: dailySlots }]);
+    try {
+      // Store the new availabilities in Firestore
+      await storeAvailability(coachId, newAvailabilities);
+      // Clear the daily slots after successful storage
+      setDailySlots([]);
+      // Close the modal after successful storage
+      onClose();
+    } catch (err) {
+     
+      // Set the error message so it can be displayed to the user
+      setError(err);
     }
-  
-    onClose();
   };
   
-
-  const handleSave = () => {
-    const flatAvailabilities = availabilities.reduce((acc, current) => {
-      const { date, timeSlots } = current;
-      const formattedSlots = timeSlots.map(slot => ({ date, slot }));
-      return [...acc, ...formattedSlots];
-    }, []);
-  
-    storeAvailability(coachId, flatAvailabilities);
-  };
 
   return (
     <VStack>
@@ -135,38 +132,30 @@ const AvailabilityCalendar = () => {
               ))}
             </VStack>
           </ModalBody>
+          {storeError && (
+            <Box color="red.500" p={3}>
+              Error saving data: {storeError.message}
+            </Box>
+          )}
+
+          {error && <Box color="red.500">{`Error saving data: ${error.message}`}</Box>}
+
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={saveAvailability}>
               Add
             </Button>
+            {error && <p>Error saving data: {error.message}</p>}
             <Button variant="ghost" onClick={onClose}>Cancel</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
+      
       <Box mt={4}>
         <Text fontSize="xl" mb={2}>Availabilities:</Text>
-        {availabilities.map(avail => (
-          <Box key={avail.date} p={2} border="1px solid" borderColor="gray.200" borderRadius="md">
-            <Text fontWeight="bold">{avail.date}</Text>
-            {avail.timeSlots.map((slot, index) => (
-              <Tag size="md" key={index} borderRadius="full" m={1}>
-                <TagLabel>{slot}</TagLabel>
-                <TagCloseButton onClick={() => removeTimeSlot(slot)} />
-              </Tag>
-            ))}
-          </Box>
-        ))}
+        
       </Box>
      
-        <Button 
-            onClick={handleSave} 
-            isLoading={isSaving} 
-            colorScheme="blue"
-            mb={4}
-        >
-            Save Availability
-        </Button>
-        {error && <p>Error saving data: {error.message}</p>}
+        
     
     </VStack>
   );
