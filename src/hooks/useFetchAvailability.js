@@ -1,3 +1,4 @@
+// useFetchAvailability.js is a custom hook that fetches the availability of a coach from Firestore.
 import { useState, useEffect } from 'react';
 import { firestore } from '../firebase/firebase';
 import { collection, query, getDocs } from 'firebase/firestore';
@@ -7,6 +8,12 @@ const useFetchAvailability = (coachId) => {
   const [isLoadingAvailabilities, setIsLoadingAvailabilities] = useState(false);
   const [fetchError, setFetchError] = useState(null);
 
+  const utcToLocalDate = (utcDate) => {
+    const date = new Date(utcDate);
+    const newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60000);
+    return newDate;
+  };
+
   useEffect(() => {
     const fetchAvailability = async () => {
       setIsLoadingAvailabilities(true);
@@ -15,7 +22,8 @@ const useFetchAvailability = (coachId) => {
         const querySnapshot = await getDocs(q);
         const availabilities = [];
         querySnapshot.forEach((doc) => {
-          availabilities.push({ id: doc.id, ...doc.data() });
+          const localDate = utcToLocalDate(doc.id);
+          availabilities.push({ id: localDate, ...doc.data() });
         });
         setFetchedAvailabilities(availabilities);
       } catch (err) {
