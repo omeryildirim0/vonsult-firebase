@@ -131,6 +131,8 @@ const AvailabilityCalendar = () => {
 
   return (
     <VStack>
+      <Text fontSize="xl" fontWeight="bold" mb={2}>Please add your availability</Text> {/* Add this line */}
+
       <Calendar
         onClickDay={handleDayClick}
         value={selectedDay}
@@ -139,6 +141,7 @@ const AvailabilityCalendar = () => {
             return 'highlight';
           }
         }}
+        title="Click on a date to add your availability"
       />
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -175,7 +178,7 @@ const AvailabilityCalendar = () => {
       </Modal>
       
       <Box mt={4}>
-        <Text fontSize="xl" mb={2}>Coach's Availabilities:</Text>
+        <Text fontSize="xl" fontWeight="bold" mb={2}>Coach's Availabilities:</Text>
         {isLoadingAvailabilities ? (
           <Text>Loading...</Text>
         ) : fetchError ? (
