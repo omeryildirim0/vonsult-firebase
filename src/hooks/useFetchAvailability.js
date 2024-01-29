@@ -39,6 +39,8 @@ const useFetchAvailability = (coachId) => {
     }
   }, [coachId]);
 
+  
+
   // Return the refetch function along with the other state
   return { fetchedAvailabilities, isLoadingAvailabilities, fetchError, refetch: fetchAvailability };
 };

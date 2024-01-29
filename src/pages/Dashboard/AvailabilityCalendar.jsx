@@ -58,7 +58,7 @@ const AvailabilityCalendar = () => {
   const [availabilities, setAvailabilities] = useState([]);
   const [selectedDay, setSelectedDay] = useState(null);
   const [dailySlots, setDailySlots] = useState([]);
-  const { isSaving, error: storeError, storeAvailability } = useStoreAvailability();
+  const { isSaving, error: storeError, storeAvailability, removeAvailability } = useStoreAvailability();
   const [authUser] = useAuthState(auth);
   const userDoc = JSON.parse(localStorage.getItem("user-info"));
   const coachId = userDoc.uid;
@@ -81,8 +81,21 @@ const AvailabilityCalendar = () => {
     }
   };
 
-  const removeTimeSlot = (slot) => {
-    setDailySlots(dailySlots.filter(s => s !== slot));
+  const removeTimeSlotFromModal = (slotToRemove) => {
+    setDailySlots(currentSlots => currentSlots.filter(slot => slot !== slotToRemove));
+  };
+
+  const removeTimeSlot = async (date, slotToRemove) => {
+    const formattedDate = date.toISOString().split('T')[0];
+
+    try {
+      // Call the hook function to remove the slot from Firestore
+      await removeAvailability(coachId, formattedDate, slotToRemove);
+      // Refetch the availabilities to update the local state
+      refetch();
+    } catch (err) {
+      setError(err);
+    }
   };
 
   const saveAvailability = async () => {
@@ -130,7 +143,7 @@ const AvailabilityCalendar = () => {
               {dailySlots.map((slot, index) => (
                 <Tag size="lg" key={index} borderRadius="full">
                   <TagLabel>{slot}</TagLabel>
-                  <TagCloseButton onClick={() => removeTimeSlot(slot)} />
+                  <TagCloseButton onClick={() => removeTimeSlotFromModal(slot)} />
                 </Tag>
               ))}
             </VStack>
@@ -167,6 +180,7 @@ const AvailabilityCalendar = () => {
                 {availability.timeSlots.map((timeSlot, index) => (
                   <Tag size="md" key={index} borderRadius="full" m={1}>
                     <TagLabel>{timeSlot}</TagLabel>
+                    <TagCloseButton onClick={() => removeTimeSlot(availability.id, timeSlot)} />
                   </Tag>
                 ))}
               </HStack>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { firestore } from "../firebase/firebase";
-import { doc, setDoc, getDoc, arrayUnion } from 'firebase/firestore';
+import { doc, setDoc, getDoc, arrayUnion, updateDoc, arrayRemove } from 'firebase/firestore';
 
 const useStoreAvailability = () => {
   const [isSaving, setIsSaving] = useState(false);
@@ -34,8 +34,23 @@ const useStoreAvailability = () => {
     }
   };
   
+  const removeAvailability = async (coachId, date, slotToRemove) => {
+    setIsSaving(true);
+    setError(null);
+    try {
+      const slotRef = doc(firestore, 'coaches', coachId, 'availability', date);
+      // Use Firestore's arrayRemove to remove the slot
+      await updateDoc(slotRef, {
+        timeSlots: arrayRemove(slotToRemove)
+      });
+      setIsSaving(false);
+    } catch (err) {
+      setError(err);
+      setIsSaving(false);
+    }
+  };
 
-  return { isSaving, error, storeAvailability };
+  return { isSaving, error, storeAvailability, removeAvailability};
 };
 
 export default useStoreAvailability;
