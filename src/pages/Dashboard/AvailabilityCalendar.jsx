@@ -92,7 +92,15 @@ const AvailabilityCalendar = () => {
       // Call the hook function to remove the slot from Firestore
       await removeAvailability(coachId, formattedDate, slotToRemove);
       // Refetch the availabilities to update the local state
-      refetch();
+      await refetch();
+
+      // Filter out dates with no time slots left
+      setFetchedAvailabilities(currentAvailabilities => 
+      currentAvailabilities.filter(availability => 
+        availability.id !== date || (availability.id === date && availability.timeSlots.length > 0)
+      )
+      );
+     
     } catch (err) {
       setError(err);
     }
@@ -174,17 +182,20 @@ const AvailabilityCalendar = () => {
           <Text color="red.500">Error: {fetchError.message}</Text>
         ) : (
           fetchedAvailabilities.map((availability) => (
-            <Box key={availability.id} p={2} border="1px solid" borderColor="gray.200" borderRadius="md">
-              <Text fontWeight="bold">{new Date(availability.id).toLocaleDateString()}</Text>
-              <HStack wrap="wrap" spacing={4}>
-                {availability.timeSlots.map((timeSlot, index) => (
-                  <Tag size="md" key={index} borderRadius="full" m={1}>
-                    <TagLabel>{timeSlot}</TagLabel>
-                    <TagCloseButton onClick={() => removeTimeSlot(availability.id, timeSlot)} />
-                  </Tag>
-                ))}
-              </HStack>
-            </Box>
+            // Check if there are no time slots for this date
+            availability.timeSlots.length === 0 ? null : (
+              <Box key={availability.id} p={2} border="1px solid" borderColor="gray.200" borderRadius="md">
+                <Text fontWeight="bold">{new Date(availability.id).toLocaleDateString()}</Text>
+                <HStack wrap="wrap" spacing={4}>
+                  {availability.timeSlots.map((timeSlot, index) => (
+                    <Tag size="md" key={index} borderRadius="full" m={1}>
+                      <TagLabel>{timeSlot}</TagLabel>
+                      <TagCloseButton onClick={() => removeTimeSlot(availability.id, timeSlot)} />
+                    </Tag>
+                  ))}
+                </HStack>
+              </Box>
+            )
           ))
         )}
       </Box>
