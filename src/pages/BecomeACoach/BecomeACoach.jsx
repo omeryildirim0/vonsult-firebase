@@ -1,3 +1,4 @@
+//Become a Coach page
 import React, { useState } from 'react';
 import {
   ChakraProvider,
@@ -28,7 +29,8 @@ const SignUp = () => {
 		username: "",
 		email: "",
 		password: "",
-        bio: ""
+    bio: "",
+    profileImage: "",
 	});
   
   const { loading, error, signup } = useSignUpCoachesWithEmail();
@@ -79,7 +81,10 @@ const SignUp = () => {
                     size="sm"
                 />
             </FormControl>
-            
+            <FormControl id="profile-pic">
+              <FormLabel>Profile Picture</FormLabel>
+              <Input type="file"  onChange={(e) => setInputs( {...inputs, profileImage: e.target.files[0] || undefined})} />
+            </FormControl>
             
             <Button colorScheme="blue" width="full" 
               onClick={() => signup(inputs)}
@@ -87,9 +92,6 @@ const SignUp = () => {
               Join as a Coach
             </Button>
 
-        
-
-            
     
           </Stack>
         </Box>
