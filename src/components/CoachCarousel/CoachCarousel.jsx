@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useBreakpointValue } from "@chakra-ui/media-query";
 import { firestore } from "../../firebase/firebase"; // Adjust the path as necessary
 import { collection, getDocs } from "firebase/firestore";
-import { Flex } from "@chakra-ui/react";
+import { Flex, Box } from "@chakra-ui/react";
 import CoachCard from "./CoachCard"; // Adjust the path as necessary
 
 const CoachCarousel = () => {
@@ -17,13 +18,22 @@ const CoachCarousel = () => {
     fetchData();
   }, []);
 
+  // Define how many cards to show based on the current breakpoint
+  const cardsToShow = useBreakpointValue({ base: 1, sm: 2, md: 3, lg: 4, xl: 5 });
+
+  // Function to slice the array of coaches based on the cardsToShow value
+  const visibleCoaches = coaches.slice(0, cardsToShow);
+
   return (
-    <Flex 
-        direction="row" 
+    <Flex
+        direction="row"
         overflowX="scroll"
+        wrap="nowrap"
     >
-      {coaches.map(coach => (
-        <CoachCard key={coach.id} name={coach.fullName} bio={coach.bio} imageUrl={coach.profilePicURL} />
+      {visibleCoaches.map(coach => (
+        <Box minWidth={["100%", "50%", "33.33%", "25%", "20%"]} key={coach.id}>
+          <CoachCard name={coach.fullName} bio={coach.bio} imageUrl={coach.profilePicURL} />
+        </Box>
       ))}
     </Flex>
   );
