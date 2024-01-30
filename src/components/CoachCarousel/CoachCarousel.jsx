@@ -8,15 +8,36 @@ import CoachCard from "./CoachCard"; // Adjust the path as necessary
 const CoachCarousel = () => {
   const [coaches, setCoaches] = useState([]);
 
+  function shuffleArray(array) {
+    let currentIndex = array.length,  randomIndex;
+  
+    // While there remain elements to shuffle...
+    while (currentIndex !== 0) {
+  
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+  
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+  
+    return array;
+  }
+  
+
   useEffect(() => {
     const fetchData = async () => {
-        const querySnapshot = await getDocs(collection(firestore, "coaches"));
-        const coachesData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setCoaches(coachesData);
+      const querySnapshot = await getDocs(collection(firestore, "coaches"));
+      const coachesData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const shuffledCoaches = shuffleArray(coachesData);
+      setCoaches(shuffledCoaches);
     };
-
+  
     fetchData();
   }, []);
+  
 
   // Define how many cards to show based on the current breakpoint
   const cardsToShow = useBreakpointValue({ base: 1, sm: 2, md: 3, lg: 4, xl: 5 });
