@@ -4,9 +4,15 @@ import { firestore } from "../../firebase/firebase"; // Adjust the path as neces
 import { collection, getDocs } from "firebase/firestore";
 import { Flex, Box, Center } from "@chakra-ui/react";
 import CoachCard from "./CoachCard"; // Adjust the path as necessary
+import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
 
 const CoachCarousel = () => {
   const [coaches, setCoaches] = useState([]);
+  const navigate = useNavigate();
+
+  const handleCardClick = (coachId) => {
+    navigate(`/coach/${coachId}`);
+  };
 
   function shuffleArray(array) {
     let currentIndex = array.length,  randomIndex;
@@ -56,7 +62,12 @@ const CoachCarousel = () => {
       >
         {visibleCoaches.map(coach => (
           <Box minWidth={["100%", "50%", "33.33%", "25%", "20%"]} key={coach.id} mx="0"> {/* Adds margin to the sides of each Box */}
-            <CoachCard name={coach.fullName} bio={coach.bio} imageUrl={coach.profilePicURL} />
+            <CoachCard 
+              name={coach.fullName} 
+              bio={coach.bio} 
+              imageUrl={coach.profilePicURL} 
+              onClick={() => handleCardClick(coach.id)}
+            />
           </Box>
         ))}
       </Flex>

@@ -2,9 +2,16 @@ import React from "react";
 import { Box, Image, Text, Badge, Flex } from "@chakra-ui/react";
 import { CheckIcon } from "@chakra-ui/icons"; // Import the CheckIcon for the verified tick
 
-const CoachCard = ({ name, bio, imageUrl }) => {
+const CoachCard = ({ name, bio, imageUrl, onClick }) => {
   return (
-    <Box borderWidth="1px" borderRadius="lg" overflow="hidden" p={0} maxWidth="300px">
+    <Box 
+      borderWidth="1px" 
+      borderRadius="lg" 
+      overflow="hidden" 
+      p={0} 
+      maxWidth="300px"
+      onClick={onClick} cursor="pointer"
+    >
       <Image src={imageUrl} alt={name} width="100%" height="auto" />
       <Box p="4">
         <Flex alignItems="center" justifyContent="space-between">
