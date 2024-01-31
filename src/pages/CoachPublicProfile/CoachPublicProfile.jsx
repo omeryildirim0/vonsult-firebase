@@ -42,7 +42,7 @@ const CoachPublicProfile = () => {
         )}
       </Box>
       <Box mt={4}>
-        <Text fontSize="xl" fontWeight="bold" mb={2}>Coach's Availabilities:</Text>
+        <Text fontSize="xl" fontWeight="bold" mb={2}>Available Times</Text>
         {isLoadingAvailabilities ? (
           <Text>Loading...</Text>
         ) : fetchError ? (
@@ -57,7 +57,6 @@ const CoachPublicProfile = () => {
                   {availability.timeSlots.map((timeSlot, index) => (
                     <Tag size="md" key={index} borderRadius="full" m={1}>
                       <TagLabel>{timeSlot}</TagLabel>
-                      <TagCloseButton onClick={() => removeTimeSlot(availability.id, timeSlot)} />
                     </Tag>
                   ))}
                 </HStack>
