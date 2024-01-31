@@ -55,7 +55,7 @@ const CoachCarousel = () => {
           align="center" // This will align the cards vertically
       >
         {visibleCoaches.map(coach => (
-          <Box minWidth={["100%", "50%", "33.33%", "25%", "20%"]} key={coach.id} mx="2"> {/* Adds margin to the sides of each Box */}
+          <Box minWidth={["100%", "50%", "33.33%", "25%", "20%"]} key={coach.id} mx="0"> {/* Adds margin to the sides of each Box */}
             <CoachCard name={coach.fullName} bio={coach.bio} imageUrl={coach.profilePicURL} />
           </Box>
         ))}
