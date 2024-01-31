@@ -8,6 +8,7 @@ import BecomeACoach from "./pages/BecomeACoach/BecomeACoach"
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase/firebase";
 import Dashboard from "./pages/Dashboard/Dashboard"
+import CoachPublicProfile from "./pages/CoachPublicProfile/CoachPublicProfile"
 
 function App() {
   const [authUser] = useAuthState(auth);
@@ -21,7 +22,7 @@ function App() {
         <Route path="/sign-up" element={!authUser ? <SignUp /> : < Navigate to='/' />} />
         <Route path="/become-a-coach" element={<BecomeACoach />} />
         <Route path="/dashboard" element={ <Dashboard />} />
-
+        <Route path="/coach/:coachId" element={<CoachPublicProfile />} />
       </Routes>
     </Layout>
   )
