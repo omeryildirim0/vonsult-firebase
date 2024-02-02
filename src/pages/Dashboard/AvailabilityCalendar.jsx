@@ -24,6 +24,9 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from '../../firebase/firebase';
 import 'react-calendar/dist/Calendar.css';
 import useFetchAvailability from '../../hooks/useFetchAvailability';
+import moment from 'moment-timezone';
+
+const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 const TimeSlotSelector = ({ onSelectSlot }) => {
     // Generate time slots from 9 AM to 5 PM
@@ -39,14 +42,22 @@ const TimeSlotSelector = ({ onSelectSlot }) => {
       }
       return slots;
     };
+
+    const getTimeZoneAbbreviation = (timeZone) => {
+      const zone = moment.tz.zone(timeZone);
+      return zone ? zone.abbr(new Date().valueOf()) : timeZone;
+    };
+
+    const userTimeZoneAbbreviation = getTimeZoneAbbreviation(userTimezone);
+
   
     const timeSlots = generateTimeSlots();
   
     return (
       <VStack spacing={4}>
         {timeSlots.map((slot, index) => (
-          <Button key={index} onClick={() => onSelectSlot(slot)} size="sm">
-            {slot}
+          <Button key={index} onClick={() => onSelectSlot(`${slot} (${userTimeZoneAbbreviation})`)} size="sm">
+            {`${slot} (${userTimeZoneAbbreviation})`}
           </Button>
         ))}
       </VStack>
@@ -86,7 +97,7 @@ const AvailabilityCalendar = () => {
   };
 
   const removeTimeSlot = async (date, slotToRemove) => {
-    const formattedDate = date.toISOString().split('T')[0];
+    
 
     try {
       // Call the hook function to remove the slot from Firestore
@@ -110,7 +121,7 @@ const AvailabilityCalendar = () => {
     setError(null);
     const dateStr = selectedDay.toISOString().split('T')[0];
     // Create an array of availability objects with the date and slot
-    const newAvailabilities = dailySlots.map(slot => ({ date: dateStr, slot }));
+    const newAvailabilities = dailySlots.map(slot => ({ date: dateStr, slot, timezone: userTimezone }));
   
     try {
       // Store the new availabilities in Firestore
@@ -153,12 +164,13 @@ const AvailabilityCalendar = () => {
             <VStack spacing={4} align="stretch" mt={4}>
               {dailySlots.map((slot, index) => (
                 <Tag size="lg" key={index} borderRadius="full">
-                  <TagLabel>{slot}</TagLabel>
+                  <TagLabel>{`${slot} `}</TagLabel>
                   <TagCloseButton onClick={() => removeTimeSlotFromModal(slot)} />
                 </Tag>
               ))}
             </VStack>
           </ModalBody>
+
           {storeError && (
             <Box color="red.500" p={3}>
               Error saving data: {storeError.message}
@@ -188,7 +200,8 @@ const AvailabilityCalendar = () => {
             // Check if there are no time slots for this date
             availability.timeSlots.length === 0 ? null : (
               <Box key={availability.id} p={2} border="1px solid" borderColor="gray.200" borderRadius="md">
-                <Text fontWeight="bold">{new Date(availability.id).toLocaleDateString()}</Text>
+                {/* This will ensure the date is displayed correctly above each set of time slots */}
+                <Text fontWeight="bold">{moment(availability.id).format('LL')}</Text>
                 <HStack wrap="wrap" spacing={4}>
                   {availability.timeSlots.map((timeSlot, index) => (
                     <Tag size="md" key={index} borderRadius="full" m={1}>
@@ -202,6 +215,7 @@ const AvailabilityCalendar = () => {
           ))
         )}
       </Box>
+
 
 
 

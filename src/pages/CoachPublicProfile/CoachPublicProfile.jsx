@@ -4,6 +4,7 @@ import { Flex, Box, Text, Image, Heading, HStack, Tag, TagLabel, TagCloseButton 
 import { doc, getDoc } from 'firebase/firestore';
 import { firestore } from '../../firebase/firebase'; // Adjust the path as necessary
 import useFetchAvailability from '../../hooks/useFetchAvailability';
+import moment from 'moment-timezone';
 
 const CoachPublicProfile = () => {
   const [coach, setCoach] = useState(null);
@@ -42,7 +43,7 @@ const CoachPublicProfile = () => {
         )}
       </Box>
       <Box mt={4}>
-        <Text fontSize="xl" fontWeight="bold" mb={2}>Available Times</Text>
+        <Text fontSize="xl" fontWeight="bold" mb={2}>Coach's Availabilities:</Text>
         {isLoadingAvailabilities ? (
           <Text>Loading...</Text>
         ) : fetchError ? (
@@ -52,11 +53,13 @@ const CoachPublicProfile = () => {
             // Check if there are no time slots for this date
             availability.timeSlots.length === 0 ? null : (
               <Box key={availability.id} p={2} border="1px solid" borderColor="gray.200" borderRadius="md">
-                <Text fontWeight="bold">{new Date(availability.id).toLocaleDateString()}</Text>
+                {/* This will ensure the date is displayed correctly above each set of time slots */}
+                <Text fontWeight="bold">{moment(availability.id).format('LL')}</Text>
                 <HStack wrap="wrap" spacing={4}>
                   {availability.timeSlots.map((timeSlot, index) => (
                     <Tag size="md" key={index} borderRadius="full" m={1}>
                       <TagLabel>{timeSlot}</TagLabel>
+                      <TagCloseButton onClick={() => removeTimeSlot(availability.id, timeSlot)} />
                     </Tag>
                   ))}
                 </HStack>
