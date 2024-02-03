@@ -15,7 +15,7 @@ const useSignUpWithEmailAndPassword = () => {
     const navigate = useNavigate();
 
 	const signup = async (inputs) => {
-		if (!inputs.email || !inputs.password  || !inputs.fullName || !inputs.bio) {
+		if (!inputs.email || !inputs.password  || !inputs.fullName || !inputs.bio  || !inputs.hourlyRate) {
 			showToast("Error", "Please fill all the fields", "error");
 			return;
 		}
@@ -43,9 +43,7 @@ const useSignUpWithEmailAndPassword = () => {
 					bio: inputs.bio,
 					userType: "coach",
 					profilePicURL: profilePicURL,
-					followers: [],
-					following: [],
-					posts: [],
+					hourlyRate: inputs.hourlyRate,
 					createdAt: Date.now(),
 				};
 				await setDoc(doc(firestore, "coaches", newUser.user.uid), userDoc);

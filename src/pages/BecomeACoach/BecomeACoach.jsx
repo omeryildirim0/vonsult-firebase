@@ -16,6 +16,8 @@ import {
   useColorModeValue,
   Textarea,
   Flex,
+  NumberInput,
+  NumberInputField,
 } from '@chakra-ui/react';
 import { FcGoogle } from 'react-icons/fc'; // Importing a placeholder Google icon
 import useSignUpWithEmailAndPassword from '../../hooks/useSignUpWithEmailAndPassword';
@@ -31,6 +33,7 @@ const SignUp = () => {
 		password: "",
     bio: "",
     profileImage: "",
+    hourlyRate: "",
 	});
   
   const { loading, error, signup } = useSignUpCoachesWithEmail();
@@ -84,6 +87,12 @@ const SignUp = () => {
             <FormControl id="profile-pic">
               <FormLabel>Profile Picture</FormLabel>
               <Input type="file"  onChange={(e) => setInputs( {...inputs, profileImage: e.target.files[0] || undefined})} />
+            </FormControl>
+            <FormControl id="hourly-rate" isRequired>
+              <FormLabel>Hourly Rate ($)</FormLabel>
+              <NumberInput min={0}>
+                <NumberInputField value={inputs.hourlyRate} onChange={(e) => setInputs({ ...inputs, hourlyRate: e.target.value })} />
+              </NumberInput>
             </FormControl>
             
             <Button colorScheme="blue" width="full" 
