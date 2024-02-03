@@ -59,7 +59,6 @@ const CoachPublicProfile = () => {
                   {availability.timeSlots.map((timeSlot, index) => (
                     <Tag size="md" key={index} borderRadius="full" m={1}>
                       <TagLabel>{timeSlot}</TagLabel>
-                      <TagCloseButton onClick={() => removeTimeSlot(availability.id, timeSlot)} />
                     </Tag>
                   ))}
                 </HStack>
