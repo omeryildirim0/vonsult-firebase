@@ -11,6 +11,7 @@ const useStoreAvailability = () => {
     try {
       for (const availability of newAvailability) {
         const dateFormatted = availability.date;
+        
         const slotRef = doc(firestore, 'coaches', coachId, 'availability', dateFormatted);
   
         const docSnap = await getDoc(slotRef);

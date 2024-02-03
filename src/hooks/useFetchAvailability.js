@@ -10,11 +10,26 @@ const useFetchAvailability = (coachId) => {
 
   // This function will convert a time slot to the user's local timezone
   const convertToUserTimeZone = (date, timeSlot, coachTimeZone) => {
-    const time = timeSlot.split(' - ')[0]; // assuming timeSlot is "1:00 PM - 2:00 PM (EST)"
+    // Remove timezone information from the timeSlot (e.g., removing "(EST)")
+    const cleanedTimeSlot = timeSlot.replace(/\s*\([^)]+\)/, '');
+    //console.log(cleanedTimeSlot); // This will log "1:00 PM - 2:00 PM"
+  
     const timeZone = timeSlot.match(/\(([^)]+)\)/)[1]; // This will extract "EST" from the time slot string
-    const dateTime = moment.tz(`${date} ${time}`, "YYYY-MM-DD h:mm A", coachTimeZone || timeZone);
-    return dateTime.tz(moment.tz.guess()).format('YYYY-MM-DD h:mm A z');
+  
+    // Assuming you want to convert the start and end times separately
+    const times = cleanedTimeSlot.split(' - ');
+    const startTime = moment.tz(`${date} ${times[0]}`, "YYYY-MM-DD h:mm A", timeZone);
+    const endTime = moment.tz(`${date} ${times[1]}`, "YYYY-MM-DD h:mm A", timeZone);
+  
+    // Convert both start and end times to the user's timezone and format them
+    const convertedStartTime = startTime.tz(moment.tz.guess()).format('h:mm A');
+    const convertedEndTime = endTime.tz(moment.tz.guess()).format('h:mm A (z)');
+  
+    // Return the converted time slot in the user's timezone
+    return `${convertedStartTime} - ${convertedEndTime}`;
+    
   };
+  
 
   const fetchAvailability = async () => {
     setIsLoadingAvailabilities(true);

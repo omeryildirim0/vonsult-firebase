@@ -27,6 +27,12 @@ import useFetchAvailability from '../../hooks/useFetchAvailability';
 import moment from 'moment-timezone';
 
 const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+const getTimeZoneAbbreviation = (timeZone) => {
+  const zone = moment.tz.zone(timeZone);
+  return zone ? zone.abbr(new Date().valueOf()) : timeZone;
+};
+
+const userTimeZoneAbbreviation = getTimeZoneAbbreviation(userTimezone);
 
 const TimeSlotSelector = ({ onSelectSlot }) => {
     // Generate time slots from 9 AM to 5 PM
@@ -42,13 +48,6 @@ const TimeSlotSelector = ({ onSelectSlot }) => {
       }
       return slots;
     };
-
-    const getTimeZoneAbbreviation = (timeZone) => {
-      const zone = moment.tz.zone(timeZone);
-      return zone ? zone.abbr(new Date().valueOf()) : timeZone;
-    };
-
-    const userTimeZoneAbbreviation = getTimeZoneAbbreviation(userTimezone);
 
   
     const timeSlots = generateTimeSlots();
@@ -97,11 +96,10 @@ const AvailabilityCalendar = () => {
   };
 
   const removeTimeSlot = async (date, slotToRemove) => {
-    
 
     try {
       // Call the hook function to remove the slot from Firestore
-      await removeAvailability(coachId, formattedDate, slotToRemove);
+      await removeAvailability(coachId, date, slotToRemove);
       // Refetch the availabilities to update the local state
       await refetch();
 
@@ -122,7 +120,7 @@ const AvailabilityCalendar = () => {
     const dateStr = selectedDay.toISOString().split('T')[0];
     // Create an array of availability objects with the date and slot
     const newAvailabilities = dailySlots.map(slot => ({ date: dateStr, slot, timezone: userTimezone }));
-  
+    // console.log(newAvailabilities);
     try {
       // Store the new availabilities in Firestore
       await storeAvailability(coachId, newAvailabilities);
