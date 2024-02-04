@@ -12,7 +12,7 @@ const CoachPublicProfile = () => {
   const { coachId } = useParams(); // get the coachId from the URL
   const { fetchedAvailabilities, isLoadingAvailabilities, fetchError } = useFetchAvailability(coachId);
   const [selectedDuration, setSelectedDuration] = useState(null);
-
+  const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
 
   useEffect(() => {
     // Fetch the coach's data
@@ -34,6 +34,11 @@ const CoachPublicProfile = () => {
   const handleDurationSelect = (minutes) => {
     setSelectedDuration(minutes);
     // ... additional logic to handle duration selection
+  };
+
+  const handleTimeSlotSelect = (selectedDate, timeSlot) => {
+    const uniqueTimeSlotIdentifier = `${selectedDate}-${timeSlot}`;
+    setSelectedTimeSlot(uniqueTimeSlotIdentifier);
   };
 
 
@@ -79,16 +84,25 @@ const CoachPublicProfile = () => {
           <Text color="red.500">Error: {fetchError.message}</Text>
         ) : (
           fetchedAvailabilities.map((availability) => (
-            // Check if there are no time slots for this date
             availability.timeSlots.length === 0 ? null : (
               <Box key={availability.id} p={2} border="1px solid" borderColor="gray.200" borderRadius="md">
-                {/* This will ensure the date is displayed correctly above each set of time slots */}
                 <Text fontWeight="bold">{moment(availability.id).format('LL')}</Text>
                 <HStack wrap="wrap" spacing={4}>
-                  {availability.timeSlots.map((timeSlot, index) => (
-                    <Tag size="md" key={index} borderRadius="full" m={1}>
-                      <TagLabel>{timeSlot}</TagLabel>
-                    </Tag>
+                  {availability.timeSlots.map((timeSlot) => (
+                    <Button 
+                      size="md" 
+                      key={`${availability.id}-${timeSlot}`} // Updated key to be unique
+                      borderRadius="full" 
+                      m={1}
+                      bg={selectedTimeSlot === `${availability.id}-${timeSlot}` ? 'teal.500' : 'gray.200'}
+                      color={selectedTimeSlot === `${availability.id}-${timeSlot}` ? 'white' : 'black'}
+                      _hover={{
+                        bg: selectedTimeSlot === `${availability.id}-${timeSlot}` ? 'teal.600' : 'gray.300',
+                      }}
+                      onClick={() => handleTimeSlotSelect(availability.id, timeSlot)} // Ensure selectedDate corresponds to the actual date value
+                    >
+                      {timeSlot}
+                    </Button>
                   ))}
                 </HStack>
               </Box>
