@@ -55,8 +55,6 @@ const CoachPublicProfile = () => {
         )}
       </Box>
 
-      
-
 
       <Box flex="2" mt={{ base: 4, md: 0 }} ml={{ base: 0, md: 4 }} pl={{ base: 0, md: 4 }}>
         <Text fontSize="xl" fontWeight="bold" mb={2}>Book a Video Call</Text>
@@ -77,38 +75,46 @@ const CoachPublicProfile = () => {
           </Button>
         </HStack>
         
-        
-        {isLoadingAvailabilities ? (
-          <Text>Loading...</Text>
-        ) : fetchError ? (
-          <Text color="red.500">Error: {fetchError.message}</Text>
-        ) : (
-          fetchedAvailabilities.map((availability) => (
-            availability.timeSlots.length === 0 ? null : (
-              <Box key={availability.id} p={2} border="1px solid" borderColor="gray.200" borderRadius="md">
-                <Text fontWeight="bold">{moment(availability.id).format('LL')}</Text>
-                <HStack wrap="wrap" spacing={4}>
-                  {availability.timeSlots.map((timeSlot) => (
-                    <Button 
-                      size="md" 
-                      key={`${availability.id}-${timeSlot}`} // Updated key to be unique
-                      borderRadius="full" 
-                      m={1}
-                      bg={selectedTimeSlot === `${availability.id}-${timeSlot}` ? 'teal.500' : 'gray.200'}
-                      color={selectedTimeSlot === `${availability.id}-${timeSlot}` ? 'white' : 'black'}
-                      _hover={{
-                        bg: selectedTimeSlot === `${availability.id}-${timeSlot}` ? 'teal.600' : 'gray.300',
-                      }}
-                      onClick={() => handleTimeSlotSelect(availability.id, timeSlot)} // Ensure selectedDate corresponds to the actual date value
-                    >
-                      {timeSlot}
-                    </Button>
-                  ))}
-                </HStack>
-              </Box>
-            )
-          ))
-        )}
+        <Box
+          maxH="400px" // Set a maximum height for the container
+          overflowY="auto" // Enable vertical scrolling
+          p={2}
+          border="1px solid"
+          borderColor="gray.200"
+          borderRadius="md"
+        >
+          {isLoadingAvailabilities ? (
+            <Text>Loading...</Text>
+          ) : fetchError ? (
+            <Text color="red.500">Error: {fetchError.message}</Text>
+          ) : (
+            fetchedAvailabilities.map((availability) => (
+              availability.timeSlots.length === 0 ? null : (
+                <Box key={availability.id} p={2} border="1px solid" borderColor="gray.200" borderRadius="md">
+                  <Text fontWeight="bold">{moment(availability.id).format('LL')}</Text>
+                  <HStack wrap="wrap" spacing={4}>
+                    {availability.timeSlots.map((timeSlot) => (
+                      <Button 
+                        size="md" 
+                        key={`${availability.id}-${timeSlot}`} // Updated key to be unique
+                        borderRadius="full" 
+                        m={1}
+                        bg={selectedTimeSlot === `${availability.id}-${timeSlot}` ? 'teal.500' : 'gray.200'}
+                        color={selectedTimeSlot === `${availability.id}-${timeSlot}` ? 'white' : 'black'}
+                        _hover={{
+                          bg: selectedTimeSlot === `${availability.id}-${timeSlot}` ? 'teal.600' : 'gray.300',
+                        }}
+                        onClick={() => handleTimeSlotSelect(availability.id, timeSlot)} // Ensure selectedDate corresponds to the actual date value
+                      >
+                        {timeSlot}
+                      </Button>
+                    ))}
+                  </HStack>
+                </Box>
+              )
+            ))
+          )}
+        </Box>
       </Box>
     </Flex>
   );
