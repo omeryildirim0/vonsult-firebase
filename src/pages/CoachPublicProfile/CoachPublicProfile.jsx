@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom'; // if you are using react-router for routing
-import { Flex, Box, Text, Image, Heading, HStack, Tag, TagLabel, Button, Divider, Spacer } from '@chakra-ui/react';
+import { Flex, Box, Text, Image, Heading, HStack, Tag, TagLabel, Button, VStack } from '@chakra-ui/react';
 import { doc, getDoc } from 'firebase/firestore';
 import { firestore } from '../../firebase/firebase'; // Adjust the path as necessary
 import useFetchAvailability from '../../hooks/useFetchAvailability';
@@ -13,6 +13,8 @@ const CoachPublicProfile = () => {
   const { fetchedAvailabilities, isLoadingAvailabilities, fetchError } = useFetchAvailability(coachId);
   const [selectedDuration, setSelectedDuration] = useState(null);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
+  const [appointmentDetails, setAppointmentDetails] = useState(null);
+
 
   useEffect(() => {
     // Fetch the coach's data
@@ -33,12 +35,33 @@ const CoachPublicProfile = () => {
 
   const handleDurationSelect = (minutes) => {
     setSelectedDuration(minutes);
-    // ... additional logic to handle duration selection
+    if (selectedTimeSlot) {
+      // Assume selectedTimeSlot is in the format 'YYYY-MM-DD-HH:mm'
+      const [date, time] = selectedTimeSlot.split('-');
+      setAppointmentDetails({
+        date: moment(date).format('LL'),
+        time,
+        price: calculatePrice(minutes, coach.hourlyRate),
+      });
+    }
   };
 
   const handleTimeSlotSelect = (selectedDate, timeSlot) => {
     const uniqueTimeSlotIdentifier = `${selectedDate}-${timeSlot}`;
     setSelectedTimeSlot(uniqueTimeSlotIdentifier);
+    setAppointmentDetails({
+      date: moment(selectedDate).format('LL'),
+      time: timeSlot,
+      price: calculatePrice(selectedDuration, coach.hourlyRate),
+    });
+  };
+
+  const calculatePrice = (duration, hourlyRate) => {
+    if (duration === 30) {
+      return (hourlyRate / 2).toFixed(2); // Half of the hourly rate for 30 minutes
+    } else {
+      return hourlyRate; // Full hourly rate for 60 minutes
+    }
   };
 
 
@@ -113,6 +136,18 @@ const CoachPublicProfile = () => {
                 </Box>
               )
             ))
+          )}
+
+        </Box>
+
+        <Box mt={4}>
+          {appointmentDetails && (
+            <VStack mt={4} p={4} borderWidth="1px" borderRadius="lg" align="stretch">
+              <Text fontSize="md">Appointment Summary</Text>
+              <Text fontSize="lg" fontWeight="bold">{appointmentDetails.date} at {appointmentDetails.time}</Text>
+              <Text fontSize="lg" color="blue.500">${appointmentDetails.price}</Text>
+              <Button colorScheme="blue" onClick={() => {/* logic to handle the next step */}}>Next</Button>
+            </VStack>
           )}
         </Box>
       </Box>
