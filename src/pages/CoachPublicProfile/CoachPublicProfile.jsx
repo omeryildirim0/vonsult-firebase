@@ -49,13 +49,15 @@ const CoachPublicProfile = () => {
   const handleTimeSlotSelect = (selectedDate, timeSlot) => {
     const uniqueTimeSlotIdentifier = `${selectedDate}-${timeSlot}`;
     setSelectedTimeSlot(uniqueTimeSlotIdentifier);
+    const startTime = timeSlot.split('-')[0].trim(); // This will get the start time from the timeSlot
     setAppointmentDetails({
       date: moment(selectedDate).format('LL'),
-      time: timeSlot,
+      time: startTime, // Use only the start time
       // Ensure the correct price is calculated with the already selected duration
       price: calculatePrice(selectedDuration || 60, coach.hourlyRate),
     });
   };
+
   
 
   const calculatePrice = (duration, hourlyRate) => {
