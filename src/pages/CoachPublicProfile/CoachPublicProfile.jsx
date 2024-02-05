@@ -35,16 +35,16 @@ const CoachPublicProfile = () => {
 
   const handleDurationSelect = (minutes) => {
     setSelectedDuration(minutes);
+    // Only update appointment details if a time slot has been selected
     if (selectedTimeSlot) {
-      // Assume selectedTimeSlot is in the format 'YYYY-MM-DD-HH:mm'
       const [date, time] = selectedTimeSlot.split('-');
-      setAppointmentDetails({
-        date: moment(date).format('LL'),
-        time,
+      setAppointmentDetails(prevDetails => ({
+        ...prevDetails,
         price: calculatePrice(minutes, coach.hourlyRate),
-      });
+      }));
     }
   };
+  
 
   const handleTimeSlotSelect = (selectedDate, timeSlot) => {
     const uniqueTimeSlotIdentifier = `${selectedDate}-${timeSlot}`;
@@ -52,9 +52,11 @@ const CoachPublicProfile = () => {
     setAppointmentDetails({
       date: moment(selectedDate).format('LL'),
       time: timeSlot,
-      price: calculatePrice(selectedDuration, coach.hourlyRate),
+      // Ensure the correct price is calculated with the already selected duration
+      price: calculatePrice(selectedDuration || 60, coach.hourlyRate),
     });
   };
+  
 
   const calculatePrice = (duration, hourlyRate) => {
     if (duration === 30) {
