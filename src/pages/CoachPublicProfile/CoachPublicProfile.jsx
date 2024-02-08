@@ -1,23 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom'; // if you are using react-router for routing
-import { Flex, Box, Text, Image, Heading, HStack, Tag, TagLabel, Button, VStack } from '@chakra-ui/react';
+import { useParams, useNavigate } from 'react-router-dom'; // Import useHistory for navigation
+import { Flex, Box, Text, Image, Heading, HStack, Button, VStack } from '@chakra-ui/react';
 import { doc, getDoc } from 'firebase/firestore';
-import { firestore } from '../../firebase/firebase'; // Adjust the path as necessary
+import { firestore } from '../../firebase/firebase';
 import useFetchAvailability from '../../hooks/useFetchAvailability';
 import moment from 'moment-timezone';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from '../../firebase/firebase';
+
 
 const CoachPublicProfile = () => {
   const [coach, setCoach] = useState(null);
   const [availability, setAvailability] = useState([]);
-  const { coachId } = useParams(); // get the coachId from the URL
+  const { coachId } = useParams();
   const { fetchedAvailabilities, isLoadingAvailabilities, fetchError } = useFetchAvailability(coachId);
   const [selectedDuration, setSelectedDuration] = useState(null);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
   const [appointmentDetails, setAppointmentDetails] = useState(null);
-
+  const [authUser] = useAuthState(auth);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch the coach's data
     const fetchCoach = async () => {
       const docRef = doc(firestore, 'coaches', coachId);
       const docSnap = await getDoc(docRef);
@@ -25,7 +28,6 @@ const CoachPublicProfile = () => {
       if (docSnap.exists()) {
         setCoach(docSnap.data());
       } else {
-        // doc.data() will be undefined in this case
         console.log('No such document!');
       }
     };
@@ -35,7 +37,6 @@ const CoachPublicProfile = () => {
 
   const handleDurationSelect = (minutes) => {
     setSelectedDuration(minutes);
-    // Only update appointment details if a time slot has been selected
     if (selectedTimeSlot) {
       const [date, time] = selectedTimeSlot.split('-');
       setAppointmentDetails(prevDetails => ({
@@ -44,30 +45,30 @@ const CoachPublicProfile = () => {
       }));
     }
   };
-  
 
   const handleTimeSlotSelect = (selectedDate, timeSlot) => {
     const uniqueTimeSlotIdentifier = `${selectedDate}-${timeSlot}`;
     setSelectedTimeSlot(uniqueTimeSlotIdentifier);
-    const startTime = timeSlot.split('-')[0].trim(); // This will get the start time from the timeSlot
+    const startTime = timeSlot.split('-')[0].trim();
     setAppointmentDetails({
       date: moment(selectedDate).format('LL'),
-      time: startTime, // Use only the start time
-      // Ensure the correct price is calculated with the already selected duration
+      time: startTime,
       price: calculatePrice(selectedDuration || 60, coach.hourlyRate),
     });
   };
 
-  
-
   const calculatePrice = (duration, hourlyRate) => {
     if (duration === 30) {
-      return (hourlyRate / 2).toFixed(2); // Half of the hourly rate for 30 minutes
+      return (hourlyRate / 2).toFixed(2);
     } else {
-      return hourlyRate; // Full hourly rate for 60 minutes
+      return hourlyRate;
     }
   };
 
+  const handleNextButtonClick = async () => {
+   
+  };
+  
 
   return (
     <Flex direction={['column', 'row']} m="4" align="stretch">
@@ -77,11 +78,9 @@ const CoachPublicProfile = () => {
             <Image src={coach.profilePicURL} alt={coach.fullName} mb="4" />
             <Heading as="h2" size="lg" mb="2">{coach.fullName}</Heading>
             <Text color="gray.500">{coach.bio}</Text>
-            {/* Other profile details */}
           </>
         )}
       </Box>
-
 
       <Box flex="2" mt={{ base: 4, md: 0 }} ml={{ base: 0, md: 4 }} pl={{ base: 0, md: 4 }}>
         <Text fontSize="xl" fontWeight="bold" mb={2}>Book a Video Call</Text>
@@ -103,8 +102,8 @@ const CoachPublicProfile = () => {
         </HStack>
         
         <Box
-          maxH="400px" // Set a maximum height for the container
-          overflowY="auto" // Enable vertical scrolling
+          maxH="400px"
+          overflowY="auto"
           p={2}
           border="1px solid"
           borderColor="gray.200"
@@ -123,7 +122,7 @@ const CoachPublicProfile = () => {
                     {availability.timeSlots.map((timeSlot) => (
                       <Button 
                         size="md" 
-                        key={`${availability.id}-${timeSlot}`} // Updated key to be unique
+                        key={`${availability.id}-${timeSlot}`} 
                         borderRadius="full" 
                         m={1}
                         bg={selectedTimeSlot === `${availability.id}-${timeSlot}` ? 'teal.500' : 'gray.200'}
@@ -131,7 +130,7 @@ const CoachPublicProfile = () => {
                         _hover={{
                           bg: selectedTimeSlot === `${availability.id}-${timeSlot}` ? 'teal.600' : 'gray.300',
                         }}
-                        onClick={() => handleTimeSlotSelect(availability.id, timeSlot)} // Ensure selectedDate corresponds to the actual date value
+                        onClick={() => handleTimeSlotSelect(availability.id, timeSlot)}
                       >
                         {timeSlot}
                       </Button>
@@ -150,7 +149,7 @@ const CoachPublicProfile = () => {
               <Text fontSize="md">Appointment Summary</Text>
               <Text fontSize="lg" fontWeight="bold">{appointmentDetails.date} at {appointmentDetails.time}</Text>
               <Text fontSize="lg" color="blue.500">${appointmentDetails.price}</Text>
-              <Button colorScheme="blue" onClick={() => {/* logic to handle the next step */}}>Next</Button>
+              <Button colorScheme="blue" onClick={handleNextButtonClick}>Next</Button>
             </VStack>
           )}
         </Box>
