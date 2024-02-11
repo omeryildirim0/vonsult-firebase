@@ -7,12 +7,15 @@ import useAuthStore from "../store/authStore";
 import { useNavigate } from "react-router-dom";
 import { getDownloadURL } from "firebase/storage";
 import { ref, uploadBytes } from "firebase/storage";
+import { getFunctions, httpsCallable } from "firebase/functions";
 
 const useSignUpWithEmailAndPassword = () => {
 	const [createUserWithEmailAndPassword, , loading, error] = useCreateUserWithEmailAndPassword(auth);
 	const showToast = useShowToast();
 	const loginUser = useAuthStore((state) => state.login);
     const navigate = useNavigate();
+	const functions = getFunctions();
+	const createStripeProduct = httpsCallable(functions, 'createStripeProduct');
 
 	const signup = async (inputs) => {
 		if (!inputs.email || !inputs.password || !inputs.fullName || !inputs.bio || !inputs.hourlyRate) {
@@ -46,30 +49,18 @@ const useSignUpWithEmailAndPassword = () => {
 				};
 				await setDoc(doc(firestore, "coaches", newUser.user.uid), userDoc);
 				
-				// Create products for the coach in the 'products' collection
-				const products = [
-					{
-						title: `${inputs.fullName}'s 30-minute Coaching Session`,
-						description: 'A short, focused coaching session.',
-						price: (inputs.hourlyRate / 2) * 100, // Assuming hourlyRate is provided as a whole dollar amount
-						length: 30, // 30 minutes session
-						coachId: newUser.user.uid,
-						createdAt: Date.now(),
-					},
-					{
-						title: `${inputs.fullName}'s 60-minute Coaching Session`,
-						description: 'A full-length coaching session for in-depth guidance.',
-						price: inputs.hourlyRate * 100, // Assuming hourlyRate is provided as a whole dollar amount
-						length: 60, // 60 minutes session
-						coachId: newUser.user.uid,
-						createdAt: Date.now(),
-					}
-				];
-	
-				// Loop through the products array to create each product
-				for (const product of products) {
-					await setDoc(doc(firestore, "products", `${newUser.user.uid}-${product.length}`), product);
-				}
+				createStripeProduct({ fullName: userDoc.fullName, bio: userDoc.bio, hourlyRate: userDoc.hourlyRate })
+					.then((result) => {
+						// Read result of the Cloud Function.
+						console.log({ productId: result.data.productId, priceId: result.data.priceId });
+					})
+					.catch((error) => {
+						// Getting the Error details.
+						const code = error.code;
+						const message = error.message;
+						const details = error.details;
+						// ...
+				});
 	
 				localStorage.setItem("user-info", JSON.stringify(userDoc));
 				loginUser(userDoc);
