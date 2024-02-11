@@ -59,7 +59,8 @@ const useSignUpWithEmailAndPassword = () => {
 						const code = error.code;
 						const message = error.message;
 						const details = error.details;
-						// ...
+						console.error({ code, message, details });
+						
 				});
 	
 				localStorage.setItem("user-info", JSON.stringify(userDoc));

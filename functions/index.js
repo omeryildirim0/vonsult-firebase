@@ -20,7 +20,6 @@ exports.createStripeProduct = functions.https.onCall(async (data, context) => {
     const price = await stripe.prices.create({
       unit_amount: data.hourlyRate * 100, // Convert to cents
       currency: "usd",
-      recurring: {interval: "hour"},
       product: product.id,
     });
 
