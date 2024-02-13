@@ -7,10 +7,15 @@ import useFetchAvailability from '../../hooks/useFetchAvailability';
 import moment from 'moment-timezone';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../firebase/firebase';
+import { getFunctions, httpsCallable } from 'firebase/functions';
+import { loadStripe } from '@stripe/stripe-js';
 
+const stripekey = 'pk_test_51Ogs1vD1CJUmd99lHC4lWLu1rP3iDfA04Ygd17fl4yy5ysyQd8x501bcmFn9vrMqwMUXSgOXosy6UvVvM12vsTlV0052blYUEv'
+const stripePromise = loadStripe(stripekey);
 
 const CoachPublicProfile = () => {
   const [coach, setCoach] = useState(null);
+  const [priceId, setPriceId] = useState(null);
   const [availability, setAvailability] = useState([]);
   const { coachId } = useParams();
   const { fetchedAvailabilities, isLoadingAvailabilities, fetchError } = useFetchAvailability(coachId);
@@ -21,19 +26,27 @@ const CoachPublicProfile = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchCoach = async () => {
+    const fetchCoachAndPrice = async () => {
       const docRef = doc(firestore, 'coaches', coachId);
       const docSnap = await getDoc(docRef);
-
+  
       if (docSnap.exists()) {
         setCoach(docSnap.data());
+        //console.log('Coach data:', docSnap.data());
+        const stripePriceId = docSnap.data().stripePriceId;
+        setPriceId(stripePriceId);
+        //console.log('Stripe price ID:', stripePriceId);
       } else {
-        console.log('No such document!');
+        console.log('Coach document does not exist!');
       }
     };
-
-    fetchCoach();
+  
+    fetchCoachAndPrice();
   }, [coachId]);
+  
+  
+  
+  
 
   const handleDurationSelect = (minutes) => {
     setSelectedDuration(minutes);
@@ -66,8 +79,48 @@ const CoachPublicProfile = () => {
   };
 
   const handleNextButtonClick = async () => {
-   
+    // a. Check if the user is authenticated or not.
+    if (!authUser) {
+      // d. if the user is not authenticated, redirect to the sign-in page.
+      navigate('/sign-in');
+      return;
+    }
+
+    // e. Create a new checkout session
+    try {
+      const stripe = await stripePromise;
+      const response = await fetch('https://us-central1-vonsult.cloudfunctions.net/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        // Pass any necessary information for creating the checkout session
+        body: JSON.stringify({
+          priceId: priceId,
+          // You can add more details here which are required for your backend to create the session
+          // For example, the date and time of the appointment, the duration, etc.
+        }),
+      });
+
+      const session = await response.json();
+      console.log('Session:', session);
+      // f. Redirect to Stripe checkout
+      const result = await stripe.redirectToCheckout({
+        sessionId: session.sessionId,
+      });
+    
+      if (result.error) {
+        // Inform the user if there's an error
+        console.error(result.error.message);
+      }
+    } catch (error) {
+      // Handle errors here
+      console.error('Error:', error);
+    }
   };
+
+  
+
   
 
   return (

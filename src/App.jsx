@@ -9,6 +9,9 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "./firebase/firebase";
 import Dashboard from "./pages/Dashboard/Dashboard"
 import CoachPublicProfile from "./pages/CoachPublicProfile/CoachPublicProfile"
+import CheckoutForm from "./stripe/CheckoutForm"
+import Return from "./stripe/Return"
+import Success from "./stripe/Success"
 
 function App() {
   const [authUser] = useAuthState(auth);
@@ -23,6 +26,10 @@ function App() {
         <Route path="/become-a-coach" element={<BecomeACoach />} />
         <Route path="/dashboard" element={ <Dashboard />} />
         <Route path="/coach/:coachId" element={<CoachPublicProfile />} />
+
+        <Route path="/success" element={<Success />} />
+        <Route path="/checkout" element={<CheckoutForm />} />
+        <Route path="/return" element={<Return />} />
       </Routes>
     </Layout>
   )

@@ -1,8 +1,19 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
+const express = require("express");
 const stripe = require("stripe")(functions.config().stripe.secret);
+const app = express();
+const cors = require("cors");
+app.use(cors({origin: true}));
+
 
 admin.initializeApp();
+
+// Add middlewares
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
+const YOUR_DOMAIN = "http://localhost:5173";
 
 exports.createStripeProduct = functions.https.onCall(async (data, context) => {
   // Authenticate the user; context.auth contains the user's auth information
@@ -10,7 +21,6 @@ exports.createStripeProduct = functions.https.onCall(async (data, context) => {
     throw new functions.https.HttpsError("unauthenticated",
         "The function must be called while authenticated.");
   }
-
   try {
     const product = await stripe.products.create({
       name: data.fullName,
@@ -37,3 +47,45 @@ exports.createStripeProduct = functions.https.onCall(async (data, context) => {
     throw new functions.https.HttpsError("internal", error.message);
   }
 });
+
+// Stripe Checkout session creation endpoint
+app.post("/create-checkout-session", async (req, res) => {
+  const {priceId} = req.body; // Make sure to send priceId from the frontend
+  try {
+    const session = await stripe.checkout.sessions.create({
+      ui_mode: "embedded",
+      line_items: [
+        {
+          price: priceId, // Use the price ID sent from the frontend
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      return_url: `${YOUR_DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`,
+      // cancel_url: `${YOUR_DOMAIN}/cancel`,
+      automatic_tax: {enabled: true},
+    });
+
+    res.json({sessionId: session.id});
+  } catch (error) {
+    res.status(500).send({error: error.message});
+  }
+});
+
+// Retrieve session status endpoint
+app.get("/session-status", async (req, res) => {
+  // Use the session ID from the query
+  const {session_id: sessionId} = req.query;
+  try {
+    const session = await stripe.checkout.sessions.retrieve(sessionId);
+    res.send({
+      status: session.payment_status,
+      customer_email: session.customer_details.email,
+    });
+  } catch (error) {
+    res.status(500).send({error: error.message});
+  }
+});
+
+// Export the API to Firebase Cloud Functions
+exports.api = functions.https.onRequest(app);
