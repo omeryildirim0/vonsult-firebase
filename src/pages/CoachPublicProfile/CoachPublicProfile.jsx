@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'; // Import useHistory for navigation
 import { Flex, Box, Text, Image, Heading, HStack, Button, VStack } from '@chakra-ui/react';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, addDoc } from 'firebase/firestore';
 import { firestore } from '../../firebase/firebase';
 import useFetchAvailability from '../../hooks/useFetchAvailability';
 import moment from 'moment-timezone';
@@ -88,6 +88,11 @@ const CoachPublicProfile = () => {
 
     // e. Create a new checkout session
     try {
+      // Before creating the Stripe session, save appointment details to Firestore
+      const appointmentRef = await addDoc(collection(firestore, "appointments"), appointmentDetails);
+      const appointmentId = appointmentRef.id;
+
+
       const stripe = await stripePromise;
       const response = await fetch('https://us-central1-vonsult.cloudfunctions.net/api/create-checkout-session', {
         method: 'POST',
@@ -97,6 +102,7 @@ const CoachPublicProfile = () => {
         // Pass any necessary information for creating the checkout session
         body: JSON.stringify({
           priceId: priceId,
+          appointmentId: appointmentId,
           // You can add more details here which are required for your backend to create the session
           // For example, the date and time of the appointment, the duration, etc.
         }),

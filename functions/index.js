@@ -4,6 +4,8 @@ const express = require("express");
 const stripe = require("stripe")(functions.config().stripe.secret);
 const app = express();
 const cors = require("cors");
+// const jwt = require("jsonwebtoken");
+// const axios = require("axios");
 app.use(cors({origin: true}));
 
 
@@ -50,8 +52,13 @@ exports.createStripeProduct = functions.https.onCall(async (data, context) => {
 
 // Stripe Checkout session creation endpoint
 app.post("/create-checkout-session", async (req, res) => {
-  const {priceId} = req.body; // Make sure to send priceId from the frontend
+  // Make sure to send priceId from the frontend
+  const {priceId, appointmentId} = req.body;
   try {
+    const returnUrl = `${YOUR_DOMAIN}/success` +
+                      `?session_id={CHECKOUT_SESSION_ID}` +
+                      `&appointment_id=${appointmentId}`;
+
     const session = await stripe.checkout.sessions.create({
       ui_mode: "embedded",
       line_items: [
@@ -61,7 +68,7 @@ app.post("/create-checkout-session", async (req, res) => {
         },
       ],
       mode: "payment",
-      return_url: `${YOUR_DOMAIN}/success?session_id={CHECKOUT_SESSION_ID}`,
+      return_url: returnUrl,
       // cancel_url: `${YOUR_DOMAIN}/cancel`,
       automatic_tax: {enabled: true},
     });
