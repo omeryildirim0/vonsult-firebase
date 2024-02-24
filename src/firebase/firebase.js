@@ -8,6 +8,7 @@ import { getAnalytics } from "firebase/analytics";
 import { loadStripe } from '@stripe/stripe-js'; // Import Stripe library
 import { getApp } from "@firebase/app";
 import { getStripePayments } from "@invertase/firestore-stripe-payments";
+import { getFunctions } from "firebase/functions";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -34,7 +35,7 @@ const payments = getStripePayments(app, {
   productsCollection: "products",
   customersCollection: "users",
 });
+const functions = getFunctions(app);
 
 
-
-export { app, auth, firestore, storage, payments, analytics};
+export { app, auth, firestore, storage, payments, analytics, functions};
