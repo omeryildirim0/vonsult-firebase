@@ -29,6 +29,7 @@ const Success = () => {
       const response = await createZoomMeeting(mockData);
       setMeetingDetails(response.data); // Store meeting details in state
       setMeetingLink(response.data.join_url); // Extract and store the meeting link
+      console.log("Meeting created:", response.data);
     } catch (err) {
       console.error("Error creating Zoom meeting:", err);
       setError("Failed to create meeting. Please try again.");
