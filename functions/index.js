@@ -41,13 +41,17 @@ exports.createZoomMeeting = functions.https.onCall(async (data, context) => {
   const accessToken = await getZoomToken(); // Use the function from step 2
   const createMeetingUrl = `https://api.zoom.us/v2/users/me/meetings`;
 
+  // Ensure startTime is passed in ISO 8601 format and duration is in minutes
   const meetingSettings = {
-    topic: 'Meeting Topic',
-    type: 1, 
+    topic: data.topic || 'Scheduled Meeting Topic', // You can allow users to set a topic
+    type: 2, // Type 2 for a scheduled meeting
+    start_time: data.start_time, // Expected to be in ISO format: 'YYYY-MM-DDTHH:MM:SSZ'
+    duration: data.duration, // Duration in minutes
+    timezone: data.timezone || 'UTC', // Set timezone or default to UTC
     settings: {
-      host_video: true,
-      participant_video: true,
-      password: "", // No password
+      host_video: data.hostVideo || true,
+      participant_video: data.participantVideo || true,
+      password: data.password || "", // Optional: set a meeting password
     },
   };
 
