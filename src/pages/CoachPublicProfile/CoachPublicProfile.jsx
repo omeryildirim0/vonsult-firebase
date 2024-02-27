@@ -52,13 +52,18 @@ const CoachPublicProfile = () => {
   const handleTimeSlotSelect = (selectedDate, timeSlot) => {
     const [startTime, endTime] = timeSlot.split('-').map(time => time.trim());
     const timezone = getUserTimezone(); // This will fetch the user's current timezone, you can adjust as necessary
+
+    // Convert selectedDate and startTime to ISO 8601 format
+    const isoStartTime = moment.tz(`${selectedDate} ${startTime}`, "YYYY-MM-DD HH:mm", timezone).toISOString();
+
     setSelectedTimeSlot(`${selectedDate}-${timeSlot}`);
     setAppointmentDetails({
       date: moment(selectedDate).format('LL'),
       startTime: startTime,
-      duration: selectedDuration || 60, // This assumes duration is set before time slot selection, adjust as needed
+      startTimeISO: isoStartTime, // ISO 8601 formatted startTime
+      duration: selectedDuration, // This assumes duration is set before time slot selection, adjust as needed
       timezone: timezone,
-      price: calculatePrice(selectedDuration || 60, coach.hourlyRate),
+      price: calculatePrice(selectedDuration, coach.hourlyRate),
     });
   };
 
@@ -205,7 +210,7 @@ const CoachPublicProfile = () => {
           {appointmentDetails && (
             <VStack mt={4} p={4} borderWidth="1px" borderRadius="lg" align="stretch">
               <Text fontSize="md">Appointment Summary</Text>
-              <Text fontSize="lg" fontWeight="bold">{appointmentDetails.date} at {appointmentDetails.startTime}</Text>
+              <Text fontSize="lg" fontWeight="bold">{appointmentDetails.date} at {appointmentDetails.startTime} for {appointmentDetails.duration} minutes</Text>
               <Text fontSize="lg" color="blue.500">${appointmentDetails.price}</Text>
               <Button colorScheme="blue" onClick={handleNextButtonClick}>Next</Button>
             </VStack>

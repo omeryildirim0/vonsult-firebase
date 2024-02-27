@@ -1,7 +1,6 @@
 import React from 'react';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
-import { useEffect } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { firestore } from '../firebase/firebase';
 import { getFunctions, httpsCallable } from 'firebase/functions';
@@ -11,9 +10,47 @@ const functions = getFunctions();
 
 
 const Success = () => {
+  const [appointmentDetails, setAppointmentDetails] = useState({});
   const [meetingLink, setMeetingLink] = useState('');
   const [meetingDetails, setMeetingDetails] = useState(null);
   const [error, setError] = useState('');
+  
+  const location = useLocation(); // Use the useLocation hook to access the query parameters
+
+  // Function to parse the query parameters
+  const useQuery = () => {
+    return new URLSearchParams(location.search);
+  };
+
+  const query = useQuery();
+  const appointmentId = query.get('appointment_id'); // Get the appointment_id from the URL
+
+  // Function to fetch appointment details
+  const fetchAppointmentDetails = async (appointmentId) => {
+    try {
+      const docRef = doc(firestore, "appointments", appointmentId);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        setAppointmentDetails(docSnap.data()); // Assuming the document contains the fields you need
+      } else {
+        console.log("No such document!");
+      }
+    } catch (err) {
+      console.error("Error fetching appointment details:", err);
+      setError("Failed to fetch appointment details. Please try again.");
+    }
+  };
+
+  useEffect(() => {
+    if (appointmentId) {
+      fetchAppointmentDetails(appointmentId);
+    }
+  }, [appointmentId]);
+
+  // Destructuring the variables from appointmentDetails
+  const { date, startTime, startTimeISO, duration, timezone } = appointmentDetails;
+  console.log("Appointment details:", appointmentDetails);
 
   // Function to call the createZoomMeeting Cloud Function with mock data
   const createMeeting = async () => {
@@ -22,8 +59,9 @@ const Success = () => {
       // Example data to pass to the function
       const mockData = {
         topic: "Test Meeting",
-        start_time: "2024-03-01T10:00:00Z",
-        duration: 30, // Duration in minutes
+        start_time: appointmentDetails.startTimeISO,
+        duration: appointmentDetails.duration, // Duration in minutes
+        timezone: appointmentDetails.timezone,
       };
       
       const response = await createZoomMeeting(mockData);
@@ -36,9 +74,7 @@ const Success = () => {
     }
   };
 
-  useEffect(() => {
-    // Any initial setup can go here
-  }, []);
+
 
   return (
     <div>
