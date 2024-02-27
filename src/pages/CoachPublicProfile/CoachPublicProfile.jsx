@@ -19,7 +19,7 @@ const CoachPublicProfile = () => {
   const [availability, setAvailability] = useState([]);
   const { coachId } = useParams();
   const { fetchedAvailabilities, isLoadingAvailabilities, fetchError } = useFetchAvailability(coachId);
-  const [selectedDuration, setSelectedDuration] = useState(null);
+  const [selectedDuration, setSelectedDuration] = useState(30);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
   const [appointmentDetails, setAppointmentDetails] = useState(null);
   const [authUser] = useAuthState(auth);
@@ -146,15 +146,13 @@ const CoachPublicProfile = () => {
         <Text fontSize="xl" fontWeight="bold" mb={2}>Book a Video Call</Text>
         <HStack spacing={4}>
           <Button
-            colorScheme="blue"
-            variant={selectedDuration === 30 ? 'solid' : 'outline'}
+            colorScheme={selectedDuration === 30 ? 'blue' : 'gray'}
             onClick={() => handleDurationSelect(30)}
           >
             30 Minutes
           </Button>
           <Button
-            colorScheme="blue"
-            variant={selectedDuration === 60 ? 'solid' : 'outline'}
+            colorScheme={selectedDuration === 60 ? 'blue' : 'gray'}
             onClick={() => handleDurationSelect(60)}
           >
             60 Minutes
@@ -207,7 +205,7 @@ const CoachPublicProfile = () => {
           {appointmentDetails && (
             <VStack mt={4} p={4} borderWidth="1px" borderRadius="lg" align="stretch">
               <Text fontSize="md">Appointment Summary</Text>
-              <Text fontSize="lg" fontWeight="bold">{appointmentDetails.date} at {appointmentDetails.time}</Text>
+              <Text fontSize="lg" fontWeight="bold">{appointmentDetails.date} at {appointmentDetails.startTime}</Text>
               <Text fontSize="lg" color="blue.500">${appointmentDetails.price}</Text>
               <Button colorScheme="blue" onClick={handleNextButtonClick}>Next</Button>
             </VStack>
