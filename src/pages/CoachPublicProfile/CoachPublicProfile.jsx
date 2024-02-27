@@ -43,31 +43,35 @@ const CoachPublicProfile = () => {
   
     fetchCoachAndPrice();
   }, [coachId]);
-  
-  
-  
-  
+
+
+  const getUserTimezone = () => {
+    return moment.tz.guess();
+  };
+
+  const handleTimeSlotSelect = (selectedDate, timeSlot) => {
+    const [startTime, endTime] = timeSlot.split('-').map(time => time.trim());
+    const timezone = getUserTimezone(); // This will fetch the user's current timezone, you can adjust as necessary
+    setSelectedTimeSlot(`${selectedDate}-${timeSlot}`);
+    setAppointmentDetails({
+      date: moment(selectedDate).format('LL'),
+      startTime: startTime,
+      duration: selectedDuration || 60, // This assumes duration is set before time slot selection, adjust as needed
+      timezone: timezone,
+      price: calculatePrice(selectedDuration || 60, coach.hourlyRate),
+    });
+  };
 
   const handleDurationSelect = (minutes) => {
     setSelectedDuration(minutes);
     if (selectedTimeSlot) {
-      const [date, time] = selectedTimeSlot.split('-');
+      const [date, startTime] = selectedTimeSlot.split('-');
       setAppointmentDetails(prevDetails => ({
         ...prevDetails,
+        duration: minutes,
         price: calculatePrice(minutes, coach.hourlyRate),
       }));
     }
-  };
-
-  const handleTimeSlotSelect = (selectedDate, timeSlot) => {
-    const uniqueTimeSlotIdentifier = `${selectedDate}-${timeSlot}`;
-    setSelectedTimeSlot(uniqueTimeSlotIdentifier);
-    const startTime = timeSlot.split('-')[0].trim();
-    setAppointmentDetails({
-      date: moment(selectedDate).format('LL'),
-      time: startTime,
-      price: calculatePrice(selectedDuration || 60, coach.hourlyRate),
-    });
   };
 
   const calculatePrice = (duration, hourlyRate) => {
@@ -125,9 +129,6 @@ const CoachPublicProfile = () => {
     }
   };
 
-  
-
-  
 
   return (
     <Flex direction={['column', 'row']} m="4" align="stretch">
