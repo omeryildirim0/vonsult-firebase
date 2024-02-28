@@ -51,17 +51,18 @@ const CoachPublicProfile = () => {
 
   const handleTimeSlotSelect = (selectedDate, timeSlot) => {
     const [startTime, endTime] = timeSlot.split('-').map(time => time.trim());
-    const timezone = getUserTimezone(); // This will fetch the user's current timezone, you can adjust as necessary
-
-    // Convert selectedDate and startTime to ISO 8601 format
-    const isoStartTime = moment.tz(`${selectedDate} ${startTime}`, "YYYY-MM-DD HH:mm", timezone).toISOString();
-
+    console.log('Selected time slot:', timeSlot);
+    const timezone = getUserTimezone(); // Fetches the user's current timezone
+  
+    // Convert selectedDate and startTime to ISO format without converting to UTC
+    const localIsoStartTime = moment.tz(`${selectedDate} ${startTime}`, "YYYY-MM-DD HH:mm", timezone).format();
+    console.log('Local ISO start time:', localIsoStartTime);
     setSelectedTimeSlot(`${selectedDate}-${timeSlot}`);
     setAppointmentDetails({
       date: moment(selectedDate).format('LL'),
       startTime: startTime,
-      startTimeISO: isoStartTime, // ISO 8601 formatted startTime
-      duration: selectedDuration, // This assumes duration is set before time slot selection, adjust as needed
+      startTimeISO: localIsoStartTime, // Keep as local time in ISO format
+      duration: selectedDuration,
       timezone: timezone,
       price: calculatePrice(selectedDuration, coach.hourlyRate),
     });
