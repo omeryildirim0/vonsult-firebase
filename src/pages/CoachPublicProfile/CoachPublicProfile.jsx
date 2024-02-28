@@ -67,6 +67,9 @@ const CoachPublicProfile = () => {
       price: calculatePrice(selectedDuration, coach.hourlyRate),
     });
   };
+  
+  
+  
 
   const handleDurationSelect = (minutes) => {
     setSelectedDuration(minutes);

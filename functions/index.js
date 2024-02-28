@@ -47,7 +47,7 @@ exports.createZoomMeeting = functions.https.onCall(async (data, context) => {
     type: 2, // Type 2 for a scheduled meeting
     start_time: data.start_time, // Expected to be in ISO format: 'YYYY-MM-DDTHH:MM:SSZ'
     duration: data.duration, // Duration in minutes
-    timezone: data.timezone || 'UTC', // Set timezone or default to UTC
+    timezone: data.timezone, // Set timezone or default to UTC
     settings: {
       host_video: data.hostVideo || true,
       participant_video: data.participantVideo || true,
@@ -63,7 +63,7 @@ exports.createZoomMeeting = functions.https.onCall(async (data, context) => {
       },
     });
 
-    return { meetingID: response.data.id, joinURL: response.data.join_url };
+    return { meetingID: response.data.id, joinURL: response.data.join_url, start_time: response.data.start_time};
   } catch (error) {
     console.error('Error creating Zoom meeting:', error);
     throw new functions.https.HttpsError('internal', 'Failed to create Zoom meeting');
