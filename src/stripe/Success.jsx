@@ -11,6 +11,7 @@ const Success = () => {
   const [meetingLink, setMeetingLink] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const userDoc = JSON.parse(localStorage.getItem("user-info"));
 
   const location = useLocation();
 
@@ -45,6 +46,7 @@ const Success = () => {
       setMeetingLink(response.data.joinURL);
       console.log("Meeting created:", response.data);
       console.log("Meeting link:", response.data.joinURL);
+      
     } catch (err) {
       console.error("Error creating Zoom meeting:", err);
       setError("Failed to create meeting. Please try again.");
@@ -65,10 +67,11 @@ const Success = () => {
       // Check if appointmentDetails contains the necessary data
       if (appointmentDetails && appointmentDetails.startTimeISO) {
         await createMeeting({
-          topic: "Test Meeting",
+          topic: "Vonsult Meeting",
           start_time: appointmentDetails.startTimeISO,
           duration: appointmentDetails.duration,
           timezone: appointmentDetails.timezone,
+          userid: userDoc.uid,
         });
       }
       setLoading(false);
@@ -82,7 +85,7 @@ const Success = () => {
   } else {
     return (
       <div>
-        <h1>Meeting Creation Success</h1>
+        <h1>Meeting Details</h1>
         {meetingLink && (
           <div>
             <p>Meeting successfully created!</p>
