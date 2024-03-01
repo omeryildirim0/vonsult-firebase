@@ -38,6 +38,12 @@ async function getZoomToken() {
 }
 
 exports.createZoomMeeting = functions.https.onCall(async (data, context) => {
+  // Authenticate the user; context.auth contains the user's auth information
+  if (!context.auth) {
+    throw new functions.https.HttpsError("unauthenticated",
+        "The function must be called while authenticated.");
+  }
+
   const accessToken = await getZoomToken(); // Use the function from step 2
   const createMeetingUrl = `https://api.zoom.us/v2/users/me/meetings`;
 
@@ -63,7 +69,22 @@ exports.createZoomMeeting = functions.https.onCall(async (data, context) => {
       },
     });
 
-    return { meetingID: response.data.id, joinURL: response.data.join_url, start_time: response.data.start_time};
+    const meetingData = {
+      meetingID: response.data.id,
+      joinURL: response.data.join_url,
+      start_time: response.data.start_time
+      // Add any other meeting details you want to store
+    };
+
+    // Reference to the user's document in Firestore
+    const userDocRef = admin.firestore().collection('users').doc(context.auth.uid);
+
+    // Create a new document for the meeting under the user's document
+    await userDocRef.collection('meetings').add(meetingData);
+
+    return meetingData;
+
+    // return { meetingID: response.data.id, joinURL: response.data.join_url, start_time: response.data.start_time};
   } catch (error) {
     console.error('Error creating Zoom meeting:', error);
     throw new functions.https.HttpsError('internal', 'Failed to create Zoom meeting');
