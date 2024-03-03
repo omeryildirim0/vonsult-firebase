@@ -6,14 +6,14 @@ import { Box, Heading, List, ListItem, Link, Text, VStack, Divider } from '@chak
 import moment from 'moment-timezone';
 
 const userDoc = JSON.parse(localStorage.getItem("user-info"));
-const userId = userDoc.uid;
+// const userId = userDoc.uid || null;
 
 const UserDashboard = () => {
   const [meetings, setMeetings] = useState([]);
 
   useEffect(() => {
     const fetchMeetings = async () => {
-      const q = query(collection(firestore, "users", userId, "meetings"));
+      const q = query(collection(firestore, "users", userDoc.uid, "meetings"));
       const querySnapshot = await getDocs(q);
       const meetingsData = querySnapshot.docs.map(doc => {
         const data = doc.data();
@@ -32,8 +32,8 @@ const UserDashboard = () => {
   }, []);
 
   const formatMeetingTime = (time) => {
-    const localTime = moment(time).tz(moment.tz.guess());
-    return `${localTime.format('YYYY-MM-DD HH:mm')} (${localTime.format('z')})`;
+    const userTimezone = moment.tz.guess();
+    return moment(time).tz(userTimezone).format('YYYY-MM-DD hh:mm A (z)');
   };
 
 
@@ -45,7 +45,7 @@ const UserDashboard = () => {
           {meetings.map(meeting => (
             <ListItem key={meeting.id} p={3} shadow="md" borderWidth="1px" borderRadius="lg">
               <VStack align="start">
-                <Text fontWeight="bold">Meeting ID: {meeting.meetingID}</Text>
+                <Text fontWeight="bold">Zoom Meeting ID: {meeting.meetingID}</Text>
                 <Text>Start Time: {formatMeetingTime(meeting.start_time)}</Text>
                 <Link href={meeting.joinURL} color="teal.500" isExternal>
                   Join URL
