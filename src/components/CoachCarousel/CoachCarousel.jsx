@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useBreakpointValue } from "@chakra-ui/media-query";
 import { firestore } from "../../firebase/firebase"; // Adjust the path as necessary
 import { collection, getDocs } from "firebase/firestore";
-import { Flex, Box, Center } from "@chakra-ui/react";
+import { Flex, Box, Center, Heading, Stack } from "@chakra-ui/react";
 import CoachCard from "./CoachCard"; // Adjust the path as necessary
 import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
 
@@ -52,25 +52,35 @@ const CoachCarousel = () => {
   const visibleCoaches = coaches.slice(0, cardsToShow);
 
   return (
-    <Center w="full"> {/* Wraps the Flex container to ensure it takes full width */}
-      <Flex
+    <Center w="full">
+      {/* Stack for vertical layout */}
+      <Stack spacing={4} align="center" w="full">
+        {/* Header */}
+        <Heading as="h2" size="xl" textAlign="center">
+          Top Experts at your fingertips
+        </Heading>
+
+        {/* Flex container for cards */}
+        <Flex
           direction="row"
           overflowX="scroll"
           wrap="nowrap"
-          justifyContent="center" // This will center the cards in the Flex container
-          align="center" // This will align the cards vertically
-      >
-        {visibleCoaches.map(coach => (
-          <Box minWidth={["100%", "50%", "33.33%", "25%", "20%"]} key={coach.id} mx="0"> {/* Adds margin to the sides of each Box */}
-            <CoachCard 
-              name={coach.fullName} 
-              bio={coach.bio} 
-              imageUrl={coach.profilePicURL} 
-              onClick={() => handleCardClick(coach.id)}
-            />
-          </Box>
-        ))}
-      </Flex>
+          justifyContent="center"
+          align="center"
+          w="full" // Ensure Flex container takes full width
+        >
+          {visibleCoaches.map(coach => (
+            <Box minWidth={["100%", "50%", "33.33%", "25%", "20%"]} key={coach.id} mx="0">
+              <CoachCard 
+                name={coach.fullName} 
+                bio={coach.bio} 
+                imageUrl={coach.profilePicURL} 
+                onClick={() => handleCardClick(coach.id)}
+              />
+            </Box>
+          ))}
+        </Flex>
+      </Stack>
     </Center>
   );
 };
