@@ -37,7 +37,7 @@ const Navbar = () => {
   const userDoc = JSON.parse(localStorage.getItem("user-info"));
 
   // This will determine if we're on a mobile device based on the breakpoint
-  const isMobile = useBreakpointValue({ base: true, md: false });
+  // const isMobile = useBreakpointValue({ base: true, md: false });
 
   const onDashboardClick = () => {
     // Navigate to the user's dashboard page
@@ -65,15 +65,18 @@ const Navbar = () => {
         </Link>
       </Flex>
 
-      {/* Mobile Menu Button */}
-      {isMobile && (
+      {/* Mobile Menu Button 
+        {isMobile && (
         <IconButton
           icon={isMobileNavOpen ? <CloseIcon /> : <HamburgerIcon />}
           onClick={() => setMobileNavOpen(!isMobileNavOpen)}
           variant="outline"
           aria-label="Toggle Navigation"
         />
-      )}
+        }
+      
+      */}
+      
 
       {/* Navigation Links */}
       <Box
