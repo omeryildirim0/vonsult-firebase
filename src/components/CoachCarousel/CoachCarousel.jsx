@@ -52,7 +52,7 @@ const CoachCarousel = () => {
   const visibleCoaches = coaches.slice(0, cardsToShow);
 
   return (
-    <Center w="full">
+    <Center w="full" mt="4">
       {/* Stack for vertical layout */}
       <Stack spacing={4} align="center" w="full">
         {/* Header */}

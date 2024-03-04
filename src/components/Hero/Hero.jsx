@@ -41,13 +41,8 @@ const HeroSection = () => {
         We are a new startup where you can book 1-on-1 sessions with renowned experts from different fields and ask them questions to get help. 
         At Vonsult, we are committed to bridging the gap between creativity and expertise. Start your journey today!
       </Text>
-      <Button
-        size={buttonSize}
-        colorScheme="yellow"
-        mb={{ base: '4', md: '8' }}
-      >
-        Find an Expert
-      </Button>
+      
+     
     </Flex>
   );
 };
