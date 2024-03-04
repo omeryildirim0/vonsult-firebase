@@ -29,7 +29,7 @@ const HeroSection = () => {
         textAlign="center"
         mb="4"
       >
-        Welcome to Vonsult
+        Your Growth Journey Starts Here
       </Heading>
       <Text
         fontSize={{ base: 'md', md: 'lg' }}
@@ -38,7 +38,8 @@ const HeroSection = () => {
         mb="8"
         fontWeight="bold"
       >
-        We are a new startup where you can book 1-on-1 sessions with renowned experts from different fields and ask them questions to get help.
+        We are a new startup where you can book 1-on-1 sessions with renowned experts from different fields and ask them questions to get help. 
+        At Vonsult, we are committed to bridging the gap between creativity and expertise. Start your journey today!
       </Text>
       <Button
         size={buttonSize}
