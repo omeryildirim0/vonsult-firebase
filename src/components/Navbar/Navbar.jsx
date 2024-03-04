@@ -12,11 +12,16 @@ import {
   IconButton,
   useBreakpointValue,
   Collapse,
-  Link
+  Link,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Avatar,
+  MenuDivider
 } from '@chakra-ui/react';
-import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
+import { HamburgerIcon, CloseIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { Image as ChakraImage } from '@chakra-ui/react';
-import logo from '../../assets/logo.png'
 import useLogout from "../../hooks/useLogout";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from '../../firebase/firebase';
@@ -33,6 +38,12 @@ const Navbar = () => {
 
   // This will determine if we're on a mobile device based on the breakpoint
   const isMobile = useBreakpointValue({ base: true, md: false });
+
+  const onDashboardClick = () => {
+    // Navigate to the user's dashboard page
+    navigate('/dashboard');
+  };
+
 
   return (
     <Flex
@@ -94,9 +105,16 @@ const Navbar = () => {
         display={{ base:'flex', md: 'flex' }}
       >
         {authUser ? (
-          <Button colorScheme="blue" onClick={handleLogout}>
-            Log Out
-          </Button>
+          <Menu>
+            <MenuButton as={Button} colorScheme="blue" rightIcon={<ChevronDownIcon />}>
+              {authUser.fullName || userDoc.fullName || 'User'} 
+            </MenuButton>
+            <MenuList>
+              <MenuItem onClick={onDashboardClick}>Dashboard</MenuItem>
+              <MenuDivider />
+              <MenuItem onClick={handleLogout}>Log Out</MenuItem>
+            </MenuList>
+          </Menu>
         ) : (
           <>
           <Button colorScheme="blue" variant="ghost" mr={4} onClick={() => navigate('/sign-in')}>
