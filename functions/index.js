@@ -46,6 +46,7 @@ exports.createZoomMeeting = functions.https.onCall(async (data, context) => {
 
   const accessToken = await getZoomToken(); // Use the function from step 2
   const createMeetingUrl = `https://api.zoom.us/v2/users/me/meetings`;
+  const coachId = data.coachId; // Get the coach ID from the request
 
   // Ensure startTime is passed in ISO 8601 format and duration is in minutes
   const meetingSettings = {
@@ -78,9 +79,11 @@ exports.createZoomMeeting = functions.https.onCall(async (data, context) => {
 
     // Reference to the user's document in Firestore
     const userDocRef = admin.firestore().collection('users').doc(context.auth.uid);
-
     // Create a new document for the meeting under the user's document
     await userDocRef.collection('meetings').add(meetingData);
+
+    const coachDocRef = admin.firestore().collection('coaches').doc(coachId);
+    await coachDocRef.collection('meetings').add(meetingData);
 
     return meetingData;
 

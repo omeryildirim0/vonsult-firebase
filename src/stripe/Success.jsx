@@ -72,6 +72,7 @@ const Success = () => {
           duration: appointmentDetails.duration,
           timezone: appointmentDetails.timezone,
           userid: userDoc.uid,
+          coachId: appointmentDetails.coachId,
         });
       }
       setLoading(false);

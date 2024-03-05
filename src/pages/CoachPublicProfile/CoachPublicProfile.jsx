@@ -65,6 +65,7 @@ const CoachPublicProfile = () => {
       duration: selectedDuration,
       timezone: timezone,
       price: calculatePrice(selectedDuration, coach.hourlyRate),
+      coachId: coachId,
     });
   };
   
