@@ -25,6 +25,7 @@ import { Image as ChakraImage } from '@chakra-ui/react';
 import useLogout from "../../hooks/useLogout";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from '../../firebase/firebase';
+import logo from '../../assets/Vonsult.svg';
 
 
 const Navbar = () => {
@@ -60,8 +61,15 @@ const Navbar = () => {
     >
       <Flex align="center">
         
-        <Link as={RouterLink} to="/" _hover={{ textDecoration: 'none' }}>
-            Vonsult
+      <Link as={RouterLink} to="/" _hover={{ textDecoration: 'none' }}>
+            <ChakraImage 
+              src={logo}
+              alt="Vonsult Logo"
+              // Set the max height of the logo to fit your navbar
+              maxH="50px" // Increased height
+              maxW="130px" // Increased width, if necessary
+             
+            />
         </Link>
       </Flex>
 
