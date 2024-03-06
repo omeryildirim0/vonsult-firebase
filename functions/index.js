@@ -106,8 +106,16 @@ exports.createStripeProduct = functions.https.onCall(async (data, context) => {
       description: data.bio,
     });
 
-    const price = await stripe.prices.create({
-      unit_amount: data.hourlyRate * 100, // Convert to cents
+    // Price for 60-minute appointment
+    const price60 = await stripe.prices.create({
+      unit_amount: data.hourlyRate * 100, // Assuming data.hourlyRate is for a 60-minute session
+      currency: "usd",
+      product: product.id,
+    });
+
+    // Price for 30-minute appointment (half of the 60-minute price)
+    const price30 = await stripe.prices.create({
+      unit_amount: (data.hourlyRate / 2) * 100, // Half of the hourly rate
       currency: "usd",
       product: product.id,
     });
@@ -118,10 +126,15 @@ exports.createStripeProduct = functions.https.onCall(async (data, context) => {
         .doc(context.auth.uid);
     await userRef.update({
       stripeProductId: product.id,
-      stripePriceId: price.id,
+      stripePrice60Id: price60.id,
+      stripePrice30Id: price30.id,
     });
 
-    return {productId: product.id, priceId: price.id};
+    return { 
+      productId: product.id,
+      price60Id: price60.id,
+      price30Id: price30.id
+    };
   } catch (error) {
     throw new functions.https.HttpsError("internal", error.message);
   }
