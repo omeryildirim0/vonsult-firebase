@@ -52,7 +52,7 @@ const useSignUpWithEmailAndPassword = () => {
 				createStripeProduct({ fullName: userDoc.fullName, bio: userDoc.bio, hourlyRate: userDoc.hourlyRate })
 					.then((result) => {
 						// Read result of the Cloud Function.
-						// console.log({ productId: result.data.productId, priceId: result.data.priceId });
+						// console.log({ productId: result.data.productId, price60Id: result.data.price60Id, price30Id: result.data.price30Id});
 					})
 					.catch((error) => {
 						// Getting the Error details.

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'; // Import useHistory for navigation
-import { Flex, Box, Text, Image, Heading, HStack, Button, VStack } from '@chakra-ui/react';
+import { Flex, Box, Text, Image, Heading, HStack, Button, VStack, calc } from '@chakra-ui/react';
 import { doc, getDoc, collection, addDoc } from 'firebase/firestore';
 import { firestore } from '../../firebase/firebase';
 import useFetchAvailability from '../../hooks/useFetchAvailability';
@@ -15,11 +15,13 @@ const stripePromise = loadStripe(stripekey);
 
 const CoachPublicProfile = () => {
   const [coach, setCoach] = useState(null);
-  const [priceId, setPriceId] = useState(null);
+  const [priceId, setPriceId] = useState(null); // State for price ID
+  const [price30Id, setPrice30Id] = useState(null); // State for 30-minute price ID
+  const [price60Id, setPrice60Id] = useState(null); // State for 60-minute price ID
   const [availability, setAvailability] = useState([]);
   const { coachId } = useParams();
   const { fetchedAvailabilities, isLoadingAvailabilities, fetchError } = useFetchAvailability(coachId);
-  const [selectedDuration, setSelectedDuration] = useState(30);
+  const [selectedDuration, setSelectedDuration] = useState(null);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState(null);
   const [appointmentDetails, setAppointmentDetails] = useState(null);
   const [authUser] = useAuthState(auth);
@@ -33,8 +35,8 @@ const CoachPublicProfile = () => {
       if (docSnap.exists()) {
         setCoach(docSnap.data());
         //console.log('Coach data:', docSnap.data());
-        const stripePriceId = docSnap.data().stripePriceId;
-        setPriceId(stripePriceId);
+        setPrice30Id(docSnap.data().stripePrice30Id); // Fetch and store 30-minute price ID
+        setPrice60Id(docSnap.data().stripePrice60Id); // Fetch and store 60-minute price ID
         //console.log('Stripe price ID:', stripePriceId);
       } else {
         console.log('Coach document does not exist!');
@@ -53,9 +55,16 @@ const CoachPublicProfile = () => {
     const [startTime, endTime] = timeSlot.split('-').map(time => time.trim());
     console.log('Selected time slot:', timeSlot);
     const timezone = getUserTimezone(); // Fetches the user's current timezone
+    console.log('User timezone:', timezone);
   
-    // Convert selectedDate and startTime to ISO format without converting to UTC
-    const localIsoStartTime = moment.tz(`${selectedDate} ${startTime}`, "YYYY-MM-DD HH:mm", timezone).format();
+    // Add 'A' to the format string to parse AM/PM part
+    // The format now expects a time like "1:00 PM" or "1:00 AM"
+    const formatString = "YYYY-MM-DD h:mm A";
+  
+    // Ensure the startTime includes the AM/PM part
+    // Example input should be "2024-03-29 1:00 PM"
+    const localIsoStartTime = moment.tz(`${selectedDate} ${startTime}`, formatString, timezone).format();
+  
     console.log('Local ISO start time:', localIsoStartTime);
     setSelectedTimeSlot(`${selectedDate}-${timeSlot}`);
     setAppointmentDetails({
@@ -69,18 +78,17 @@ const CoachPublicProfile = () => {
     });
   };
   
-  
-  
 
   const handleDurationSelect = (minutes) => {
     setSelectedDuration(minutes);
-    if (selectedTimeSlot) {
-      const [date, startTime] = selectedTimeSlot.split('-');
-      setAppointmentDetails(prevDetails => ({
-        ...prevDetails,
+    setPriceId(minutes === 30 ? price30Id : price60Id);
+    calculatePrice(minutes, coach.hourlyRate);
+    if (appointmentDetails) {
+      setAppointmentDetails({
+        ...appointmentDetails,
         duration: minutes,
         price: calculatePrice(minutes, coach.hourlyRate),
-      }));
+      });
     }
   };
 
@@ -138,7 +146,6 @@ const CoachPublicProfile = () => {
       console.error('Error:', error);
     }
   };
-
 
   return (
     <Flex direction={['column', 'row']} m="4" align="stretch">
@@ -212,7 +219,7 @@ const CoachPublicProfile = () => {
         </Box>
 
         <Box mt={4}>
-          {appointmentDetails && (
+          {selectedDuration && selectedTimeSlot && appointmentDetails && (
             <VStack mt={4} p={4} borderWidth="1px" borderRadius="lg" align="stretch">
               <Text fontSize="md">Appointment Summary</Text>
               <Text fontSize="lg" fontWeight="bold">{appointmentDetails.date} at {appointmentDetails.startTime} for {appointmentDetails.duration} minutes</Text>
