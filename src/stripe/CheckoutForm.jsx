@@ -3,7 +3,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { EmbeddedCheckoutProvider, EmbeddedCheckout } from '@stripe/react-stripe-js';
 
 // This is your test public API key.
-const stripekey = 'pk_test_51Ogs1vD1CJUmd99lHC4lWLu1rP3iDfA04Ygd17fl4yy5ysyQd8x501bcmFn9vrMqwMUXSgOXosy6UvVvM12vsTlV0052blYUEv';
+const stripekey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
 const stripePromise = loadStripe(stripekey);
 
 const CheckoutForm = () => {
