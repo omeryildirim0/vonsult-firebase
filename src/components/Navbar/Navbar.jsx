@@ -104,7 +104,7 @@ const Navbar = () => {
               onClick={() => navigate('/become-a-coach')}
             >Become a Coach</Text>
             <Text cursor="pointer">Blog</Text> 
-          
+            comments
           */}
          
         </Stack>
