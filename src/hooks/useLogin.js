@@ -17,18 +17,29 @@ const useLogin = () => {
 			const userCred = await signInWithEmailAndPassword(inputs.email, inputs.password);
 
 			if (userCred) {
-				const docRef = doc(firestore, "users", userCred.user.uid);
-				const docSnap = await getDoc(docRef);
-				localStorage.setItem("user-info", JSON.stringify(docSnap.data()));
-				loginUser(docSnap.data());
+				// Check if the user is in the 'users' collection
+				const userDocRef = doc(firestore, "users", userCred.user.uid);
+				const userDocSnap = await getDoc(userDocRef);
+	
+				if (userDocSnap.exists()) {
+					// User is a regular user
+					localStorage.setItem("user-info", JSON.stringify(userDocSnap.data()));
+					loginUser(userDocSnap.data());
+				} else {
+					// If not in 'users', check 'coaches'
+					const coachDocRef = doc(firestore, "coaches", userCred.user.uid);
+					const coachDocSnap = await getDoc(coachDocRef);
+	
+					if (coachDocSnap.exists()) {
+						// User is a coach
+						localStorage.setItem("user-info", JSON.stringify(coachDocSnap.data()));
+						loginUser(coachDocSnap.data());
+					} else {
+						// Handle case where user is neither in 'users' nor 'coaches'
+						showToast("Error", "User not found in any category", "error");
+					}
+				}
 			}
-			if (userCred) {
-				const docRef = doc(firestore, "coaches", userCred.user.uid);
-				const docSnap = await getDoc(docRef);
-				localStorage.setItem("user-info", JSON.stringify(docSnap.data()));
-				loginUser(docSnap.data());
-			}
-
 		} catch (error) {
 			showToast("Error", error.message, "error");
 		}

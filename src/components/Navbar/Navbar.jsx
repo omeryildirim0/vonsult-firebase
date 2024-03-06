@@ -118,7 +118,7 @@ const Navbar = () => {
         {authUser ? (
           <Menu>
             <MenuButton as={Button} colorScheme="blue" rightIcon={<ChevronDownIcon />}>
-              {authUser.fullName || userDoc.fullName || 'User'} 
+              {'User'} 
             </MenuButton>
             <MenuList>
               <MenuItem onClick={onDashboardClick}>Dashboard</MenuItem>
