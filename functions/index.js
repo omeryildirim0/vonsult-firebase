@@ -73,7 +73,8 @@ exports.createZoomMeeting = functions.https.onCall(async (data, context) => {
     const meetingData = {
       meetingID: response.data.id,
       joinURL: response.data.join_url,
-      start_time: response.data.start_time
+      start_time: response.data.start_time,
+      coachId: coachId,
       // Add any other meeting details you want to store
     };
 
