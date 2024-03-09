@@ -13,7 +13,7 @@ app.use(cors({origin: true}));
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
-const YOUR_DOMAIN = "http://localhost:5173";
+const YOUR_DOMAIN = functions.config().vonsult.domain || "http://localhost:5173";
 
 async function getZoomToken() {
   const zoomClientId = functions.config().zoom.client_id;
