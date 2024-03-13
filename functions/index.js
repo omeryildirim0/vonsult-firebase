@@ -5,6 +5,7 @@ const stripe = require("stripe")(functions.config().stripe.secret);
 const app = express();
 const cors = require("cors");
 const axios = require("axios");
+const sgMail = require('@sendgrid/mail');
 
 admin.initializeApp();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 
 const YOUR_DOMAIN = functions.config().vonsult.domain || "http://localhost:5173";
+sgMail.setApiKey(functions.config().sendgrid.key);
 
 async function getZoomToken() {
   const zoomClientId = functions.config().zoom.client_id;
@@ -184,6 +186,8 @@ app.get("/session-status", async (req, res) => {
     res.status(500).send({error: error.message});
   }
 });
+
+
 
 // Export the API to Firebase Cloud Functions
 exports.api = functions.https.onRequest(app);
