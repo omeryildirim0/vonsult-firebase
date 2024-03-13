@@ -76,7 +76,10 @@ const CoachPublicProfile = () => {
       price: calculatePrice(selectedDuration, coach.hourlyRate),
       coachId: coachId,
       userId: authUser?.uid,
+      userEmail: authUser?.email,
+      coachEmail: coach?.email,
     });
+    console.log('Appointment details:', appointmentDetails);
   };
   
 
