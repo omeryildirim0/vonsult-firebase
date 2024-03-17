@@ -55,8 +55,8 @@ const TimeSlotSelector = ({ onSelectSlot }) => {
     return (
       <VStack spacing={4}>
         {timeSlots.map((slot, index) => (
-          <Button key={index} onClick={() => onSelectSlot(`${slot} (${userTimeZoneAbbreviation})`)} size="sm">
-            {`${slot} (${userTimeZoneAbbreviation})`}
+          <Button key={index} onClick={() => onSelectSlot(`${slot} (${userTimezone})`)} size="sm">
+            {`${slot} (${userTimezone})`}
           </Button>
         ))}
       </VStack>
