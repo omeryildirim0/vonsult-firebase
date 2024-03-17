@@ -75,6 +75,7 @@ const CoachCarousel = () => {
                 name={coach.fullName} 
                 bio={coach.bio} 
                 imageUrl={coach.profilePicURL} 
+                hourlyRate={coach.hourlyRate}
                 onClick={() => handleCardClick(coach.id)}
               />
             </Box>

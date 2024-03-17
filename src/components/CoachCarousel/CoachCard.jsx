@@ -1,8 +1,8 @@
 import React from "react";
 import { Box, Image, Text, Badge, Flex } from "@chakra-ui/react";
-import { CheckIcon } from "@chakra-ui/icons"; // Import the CheckIcon for the verified tick
+import { CheckIcon } from "@chakra-ui/icons";
 
-const CoachCard = ({ name, bio, imageUrl, onClick }) => {
+const CoachCard = ({ name, bio, imageUrl, hourlyRate, onClick }) => {
   return (
     <Box 
       borderWidth="1px" 
@@ -27,6 +27,10 @@ const CoachCard = ({ name, bio, imageUrl, onClick }) => {
         </Flex>
         <Text color="gray.500" fontSize="sm" noOfLines={2} mt="2">
           {bio}
+        </Text>
+        {/* Display hourly rate */}
+        <Text color="gray.600" fontSize="md" mt="2" fontWeight="bold">
+          Hourly Rate: ${hourlyRate}
         </Text>
       </Box>
     </Box>
