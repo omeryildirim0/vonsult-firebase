@@ -25,14 +25,15 @@ const useFetchAvailability = (coachId) => {
     // Parse the start and end times separately using the coach's time zone
     const [startTimeString, endTimeString] = cleanedTimeSlot.split(' - ');
     const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  
+    
+
     // Convert the start and end times to the user's local timezone
     const startTime = moment.tz(`${date} ${startTimeString}`, "YYYY-MM-DD h:mm A", coachTimeZone);
     const endTime = moment.tz(`${date} ${endTimeString}`, "YYYY-MM-DD h:mm A", coachTimeZone);
   
     const convertedStartTime = startTime.tz(userTimeZone).format('h:mm A');
     const convertedEndTime = endTime.tz(userTimeZone).format('h:mm A');
-  
+    
     // Return the converted time slot in the user's timezone
     return `${convertedStartTime} - ${convertedEndTime} (${userTimeZone})`;
   };
