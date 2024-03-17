@@ -159,6 +159,9 @@ const CoachPublicProfile = () => {
             <Image src={coach.profilePicURL} alt={coach.fullName} mb="4" />
             <Heading as="h2" size="lg" mb="2">{coach.fullName}</Heading>
             <Text color="gray.500">{coach.bio}</Text>
+            <Text color="gray.600" fontWeight="bold">
+              Hourly Rate: ${coach.hourlyRate}
+            </Text>
           </>
         )}
       </Box>
