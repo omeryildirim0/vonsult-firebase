@@ -27,12 +27,6 @@ import useFetchAvailability from '../../hooks/useFetchAvailability';
 import moment from 'moment-timezone';
 
 const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-const getTimeZoneAbbreviation = (timeZone) => {
-  const zone = moment.tz.zone(timeZone);
-  return zone ? zone.abbr(new Date().valueOf()) : timeZone;
-};
-
-const userTimeZoneAbbreviation = getTimeZoneAbbreviation(userTimezone);
 
 const TimeSlotSelector = ({ onSelectSlot }) => {
     // Generate time slots from 9 AM to 5 PM
@@ -48,7 +42,6 @@ const TimeSlotSelector = ({ onSelectSlot }) => {
       }
       return slots;
     };
-
   
     const timeSlots = generateTimeSlots();
   
@@ -74,8 +67,6 @@ const AvailabilityCalendar = () => {
   const coachId = userDoc.uid;
   const [error, setError] = useState(null);
   const { fetchedAvailabilities, isLoadingAvailabilities, fetchError, refetch } = useFetchAvailability(coachId);
-
-
 
   const handleDayClick = (value, event) => {
     setError(null); 
@@ -214,10 +205,6 @@ const AvailabilityCalendar = () => {
         )}
       </Box>
 
-
-
-
-     
     
     </VStack>
   );
