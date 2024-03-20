@@ -77,6 +77,9 @@ exports.createZoomMeeting = functions.https.onCall(async (data, context) => {
       joinURL: response.data.join_url,
       start_time: response.data.start_time,
       coachId: coachId,
+      coachEmail: data.coachEmail,
+      userEmail: data.userEmail,
+      date: data.date,
       // Add any other meeting details you want to store
     };
 
@@ -187,7 +190,53 @@ app.get("/session-status", async (req, res) => {
   }
 });
 
+exports.sendZoomConfirmationEmail = functions.firestore
+    .document('users/{userId}/meetings/{meetingId}')
+    .onCreate(async (snap, context) => {
+        // Retrieve the meeting details from the snapshot
+        const meetingDetails = snap.data();
 
+        // Email to the user
+        const userEmail = {
+            to: meetingDetails.userEmail,
+            from: 'support@vonsult.com', // Replace with your SendGrid verified sender
+            subject: 'Your Zoom Meeting Confirmation',
+            text: `Hello,
+
+            Your meeting with the coach is confirmed. Here are the details:
+            - Date: ${meetingDetails.date} // Format the date as needed
+            - Time: ${meetingDetails.start_time} // Include the time
+            - Zoom Link: ${meetingDetails.joinURL}
+
+            Thank you for using our service.
+            `
+        };
+
+        // Email to the coach
+        const coachEmail = {
+            to: meetingDetails.coachEmail,
+            from: 'support@vonsult.com', // Replace with your SendGrid verified sender
+            subject: 'New Zoom Meeting Scheduled',
+            text: `Hello,
+
+            A new meeting has been scheduled with you. Here are the details:
+            - Date: ${meetingDetails.date} // Format the date as needed
+            - Time: ${meetingDetails.start_time} // Include the time
+            - Zoom Link: ${meetingDetails.joinURL}
+
+            Please be prepared to meet at the scheduled time.
+            `
+        };
+
+        try {
+            // Send emails to both the user and the coach
+            await sgMail.send(userEmail);
+            await sgMail.send(coachEmail);
+            console.log('Confirmation emails sent successfully.');
+        } catch (error) {
+            console.error('Error sending confirmation emails', error);
+        }
+    });
 
 // Export the API to Firebase Cloud Functions
 exports.api = functions.https.onRequest(app);

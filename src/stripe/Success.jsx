@@ -16,11 +16,9 @@ const Success = () => {
   const { removeAvailability } = useStoreAvailability();
 
   const location = useLocation();
-
   const useQuery = () => {
     return new URLSearchParams(location.search);
   };
-
   const query = useQuery();
   const appointmentId = query.get('appointment_id');
 
@@ -56,10 +54,6 @@ const Success = () => {
     console.log('Time slot:', timeSlot);
     return { date, timeSlot };
   };
-  
-  
-  
-  
 
   const fetchAppointmentDetails = async (appointmentId) => {
     try {
@@ -117,6 +111,10 @@ const Success = () => {
           timezone: appointmentDetails.timezone,
           userid: userDoc.uid,
           coachId: appointmentDetails.coachId,
+          coachEmail: appointmentDetails.coachEmail,
+          date: appointmentDetails.date,
+          userEmail: userDoc.email,
+
         });
       }
       setLoading(false);
