@@ -53,6 +53,7 @@ const Success = () => {
     console.log('Date:', date);
     console.log('Time slot:', timeSlot);
     return { date, timeSlot };
+    
   };
 
   const fetchAppointmentDetails = async (appointmentId) => {
@@ -81,6 +82,7 @@ const Success = () => {
       console.log("Meeting link:", response.data.joinURL);
 
       const { date, timeSlot } = processStartTimeISO(appointmentDetails.startTimeISO, appointmentDetails.timezone);
+      
 
       // Call removeAvailability with the formatted date and slot.
       await removeAvailability(appointmentDetails.coachId, date, timeSlot);
@@ -114,7 +116,7 @@ const Success = () => {
           coachEmail: appointmentDetails.coachEmail,
           date: appointmentDetails.date,
           userEmail: userDoc.email,
-
+          userTime: appointmentDetails.startTime,
         });
       }
       setLoading(false);

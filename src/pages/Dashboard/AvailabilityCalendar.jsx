@@ -25,6 +25,8 @@ import { auth } from '../../firebase/firebase';
 import 'react-calendar/dist/Calendar.css';
 import useFetchAvailability from '../../hooks/useFetchAvailability';
 import moment from 'moment-timezone';
+import { updateDoc, doc } from 'firebase/firestore';
+import { firestore } from '../../firebase/firebase';
 
 const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
@@ -115,6 +117,10 @@ const AvailabilityCalendar = () => {
     try {
       // Store the new availabilities in Firestore
       await storeAvailability(coachId, newAvailabilities);
+
+      await updateDoc(doc(firestore, "coaches", coachId), {
+        timezone: userTimezone,
+      });
       // Refetch the availabilities to update the local state
       refetch();
       // Clear the daily slots after successful storage

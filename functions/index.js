@@ -80,6 +80,7 @@ exports.createZoomMeeting = functions.https.onCall(async (data, context) => {
       coachEmail: data.coachEmail,
       userEmail: data.userEmail,
       date: data.date,
+      userTime: data.userTime,
       // Add any other meeting details you want to store
     };
 
@@ -203,13 +204,14 @@ exports.sendZoomConfirmationEmail = functions.firestore
             subject: 'Your Zoom Meeting Confirmation',
             text: `Hello,
 
-            Your meeting with the coach is confirmed. Here are the details:
-            - Date: ${meetingDetails.date} // Format the date as needed
-            - Time: ${meetingDetails.start_time} // Include the time
-            - Zoom Link: ${meetingDetails.joinURL}
-
-            Thank you for using our service.
-            `
+Your meeting with the coach is confirmed. Here are the details:
+  - Date: ${meetingDetails.date} 
+  - Time: ${meetingDetails.userTime} 
+  - Zoom Link: ${meetingDetails.joinURL}
+  
+  Thank you for using our service.
+  Vonsult Team
+  `
         };
 
         // Email to the coach
@@ -219,13 +221,14 @@ exports.sendZoomConfirmationEmail = functions.firestore
             subject: 'New Zoom Meeting Scheduled',
             text: `Hello,
 
-            A new meeting has been scheduled with you. Here are the details:
-            - Date: ${meetingDetails.date} // Format the date as needed
-            - Time: ${meetingDetails.start_time} // Include the time
-            - Zoom Link: ${meetingDetails.joinURL}
+A new meeting has been scheduled with you. Here are the details:
+  - Date: ${meetingDetails.date} 
+  - Time: ${meetingDetails.start_time} 
+  - Zoom Link: ${meetingDetails.joinURL}
 
-            Please be prepared to meet at the scheduled time.
-            `
+  Please be prepared to meet at the scheduled time.
+  Vonsult Team
+  `
         };
 
         try {
