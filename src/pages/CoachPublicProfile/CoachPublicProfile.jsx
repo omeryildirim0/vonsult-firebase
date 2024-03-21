@@ -77,7 +77,9 @@ const CoachPublicProfile = () => {
       coachId: coachId,
       userId: authUser?.uid,
       userEmail: authUser?.email,
-      coachEmail: coach?.email,
+      coachEmail: coach.email,
+      coachName: coach.fullName,
+      coachTimeZone: coach.timezone,
     });
     console.log('Appointment details:', appointmentDetails);
   };

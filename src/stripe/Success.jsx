@@ -81,7 +81,7 @@ const Success = () => {
       console.log("Meeting created:", response.data);
       console.log("Meeting link:", response.data.joinURL);
 
-      const { date, timeSlot } = processStartTimeISO(appointmentDetails.startTimeISO, appointmentDetails.timezone);
+      const { date, timeSlot } = processStartTimeISO(appointmentDetails.startTimeISO, appointmentDetails.coachTimeZone);
       
 
       // Call removeAvailability with the formatted date and slot.
