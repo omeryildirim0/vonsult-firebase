@@ -117,6 +117,8 @@ const Success = () => {
           date: appointmentDetails.date,
           userEmail: userDoc.email,
           userTime: appointmentDetails.startTime,
+          coachTimeZone: appointmentDetails.coachTimeZone,
+          coachTimeSlot: appointmentDetails.coachTimeSlot,
         });
       }
       setLoading(false);

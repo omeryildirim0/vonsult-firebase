@@ -81,6 +81,7 @@ exports.createZoomMeeting = functions.https.onCall(async (data, context) => {
       userEmail: data.userEmail,
       date: data.date,
       userTime: data.userTime,
+      coachTimeSlot: data.coachTimeSlot,
       // Add any other meeting details you want to store
     };
 
@@ -223,7 +224,7 @@ Your meeting with the coach is confirmed. Here are the details:
 
 A new meeting has been scheduled with you. Here are the details:
   - Date: ${meetingDetails.date} 
-  - Time: ${meetingDetails.start_time} 
+  - Time: ${meetingDetails.coachTimeSlot} 
   - Zoom Link: ${meetingDetails.joinURL}
 
   Please be prepared to meet at the scheduled time.

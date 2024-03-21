@@ -18,6 +18,7 @@ const CoachPublicProfile = () => {
   const [priceId, setPriceId] = useState(null); // State for price ID
   const [price30Id, setPrice30Id] = useState(null); // State for 30-minute price ID
   const [price60Id, setPrice60Id] = useState(null); // State for 60-minute price ID
+  const [coachTimezone, setCoachTimezone] = useState(null);
   const [availability, setAvailability] = useState([]);
   const { coachId } = useParams();
   const { fetchedAvailabilities, isLoadingAvailabilities, fetchError } = useFetchAvailability(coachId);
@@ -37,6 +38,7 @@ const CoachPublicProfile = () => {
         //console.log('Coach data:', docSnap.data());
         setPrice30Id(docSnap.data().stripePrice30Id); // Fetch and store 30-minute price ID
         setPrice60Id(docSnap.data().stripePrice60Id); // Fetch and store 60-minute price ID
+        setCoachTimezone(docSnap.data().timezone);
         //console.log('Stripe price ID:', stripePriceId);
       } else {
         console.log('Coach document does not exist!');
@@ -64,8 +66,15 @@ const CoachPublicProfile = () => {
     // Ensure the startTime includes the AM/PM part
     // Example input should be "2024-03-29 1:00 PM"
     const localIsoStartTime = moment.tz(`${selectedDate} ${startTime}`, formatString, timezone).format();
-  
     console.log('Local ISO start time:', localIsoStartTime);
+    
+    // Convert the start time and end time to the coach's timezone
+    const coachIsoStartTime = moment.tz(`${selectedDate} ${startTime}`, formatString, timezone).tz(coachTimezone).format("h:mm A");
+    const coachIsoEndTime = moment.tz(`${selectedDate} ${endTime}`, formatString, timezone).tz(coachTimezone).format("h:mm A");
+    const coachTimeSlot = `${coachIsoStartTime} - ${coachIsoEndTime} (${coachTimezone})`;
+    console.log('Coach time slot:', coachTimeSlot);
+
+  
     setSelectedTimeSlot(`${selectedDate}-${timeSlot}`);
     setAppointmentDetails({
       date: moment(selectedDate).format('LL'),
@@ -80,6 +89,7 @@ const CoachPublicProfile = () => {
       coachEmail: coach.email,
       coachName: coach.fullName,
       coachTimeZone: coach.timezone,
+      coachTimeSlot: coachTimeSlot,
     });
     console.log('Appointment details:', appointmentDetails);
   };
