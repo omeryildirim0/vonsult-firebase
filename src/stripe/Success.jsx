@@ -119,6 +119,8 @@ const Success = () => {
           userTime: appointmentDetails.startTime,
           coachTimeZone: appointmentDetails.coachTimeZone,
           coachTimeSlot: appointmentDetails.coachTimeSlot,
+          userTimeSlot: appointmentDetails.userTimeSlot, 
+          coachName: appointmentDetails.coachName,
         });
       }
       setLoading(false);

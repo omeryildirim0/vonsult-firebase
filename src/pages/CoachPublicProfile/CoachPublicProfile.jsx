@@ -90,6 +90,7 @@ const CoachPublicProfile = () => {
       coachName: coach.fullName,
       coachTimeZone: coach.timezone,
       coachTimeSlot: coachTimeSlot,
+      userTimeSlot: timeSlot, 
     });
     console.log('Appointment details:', appointmentDetails);
   };

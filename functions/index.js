@@ -82,6 +82,8 @@ exports.createZoomMeeting = functions.https.onCall(async (data, context) => {
       date: data.date,
       userTime: data.userTime,
       coachTimeSlot: data.coachTimeSlot,
+      userTimeSlot: data.userTimeSlot,
+      coachName: data.coachName,
       // Add any other meeting details you want to store
     };
 
@@ -205,9 +207,9 @@ exports.sendZoomConfirmationEmail = functions.firestore
             subject: 'Your Zoom Meeting Confirmation',
             text: `Hello,
 
-Your meeting with the coach is confirmed. Here are the details:
+Your meeting with ${meetingDetails.coachName} is confirmed. Here are the details:
   - Date: ${meetingDetails.date} 
-  - Time: ${meetingDetails.userTime} 
+  - Time: ${meetingDetails.userTimeSlot} 
   - Zoom Link: ${meetingDetails.joinURL}
   
   Thank you for using our service.
