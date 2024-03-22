@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom'; // Import useHistory for navigation
-import { Flex, Box, Text, Image, Heading, HStack, Button, VStack, calc } from '@chakra-ui/react';
+import { Flex, Box, Text, Image, Heading, HStack, Button, VStack, Spinner } from '@chakra-ui/react';
 import { doc, getDoc, collection, addDoc } from 'firebase/firestore';
 import { firestore } from '../../firebase/firebase';
 import useFetchAvailability from '../../hooks/useFetchAvailability';
@@ -27,6 +27,7 @@ const CoachPublicProfile = () => {
   const [appointmentDetails, setAppointmentDetails] = useState(null);
   const [authUser] = useAuthState(auth);
   const navigate = useNavigate();
+  const [isLoadingNext, setIsLoadingNext] = useState(false);
 
   useEffect(() => {
     const fetchCoachAndPrice = async () => {
@@ -119,9 +120,10 @@ const CoachPublicProfile = () => {
 
   const handleNextButtonClick = async () => {
     // a. Check if the user is authenticated or not.
+    setIsLoadingNext(true); // Start loading
     if (!authUser) {
-      // d. if the user is not authenticated, redirect to the sign-in page.
       navigate('/sign-in');
+      setIsLoadingNext(false); // Stop loading if user is not authenticated
       return;
     }
 
@@ -162,6 +164,7 @@ const CoachPublicProfile = () => {
       // Handle errors here
       console.error('Error:', error);
     }
+    setIsLoadingNext(false); // Stop loading
   };
 
   return (
@@ -244,7 +247,15 @@ const CoachPublicProfile = () => {
               <Text fontSize="md">Appointment Summary</Text>
               <Text fontSize="lg" fontWeight="bold">{appointmentDetails.date} at {appointmentDetails.startTime} for {appointmentDetails.duration} minutes</Text>
               <Text fontSize="lg" color="blue.500">${appointmentDetails.price}</Text>
-              <Button colorScheme="blue" onClick={handleNextButtonClick}>Next</Button>
+              <Button 
+                colorScheme="blue" 
+                onClick={handleNextButtonClick}
+                isLoading={isLoadingNext} 
+                disabled={isLoadingNext} 
+                spinner={<Spinner size="sm" />}
+              >
+                Next
+              </Button>
             </VStack>
           )}
         </Box>
