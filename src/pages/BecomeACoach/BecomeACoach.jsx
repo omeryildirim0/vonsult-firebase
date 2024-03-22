@@ -84,7 +84,7 @@ const SignUp = () => {
                     size="sm"
                 />
             </FormControl>
-            <FormControl id="profile-pic">
+            <FormControl id="profile-pic" isRequired>
               <FormLabel>Profile Picture</FormLabel>
               <Input type="file"  onChange={(e) => setInputs( {...inputs, profileImage: e.target.files[0] || undefined})} />
             </FormControl>
