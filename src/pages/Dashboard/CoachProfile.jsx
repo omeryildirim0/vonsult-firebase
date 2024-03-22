@@ -44,7 +44,7 @@ const CoachProfile = () => {
   
   const handleCopyProfileUrl = () => {
     // Construct the profile URL using the coach's uid
-    const profileUrl = `${window.location.origin}/coach/${coachProfile?.uid || 'your-uid'}`;
+    const profileUrl = `${window.location.origin}/coach/${coachProfile?.uid}`;
     navigator.clipboard.writeText(profileUrl).then(() => {
       // Provide feedback to the user
       toast({
