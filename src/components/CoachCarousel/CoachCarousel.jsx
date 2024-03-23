@@ -70,7 +70,7 @@ const CoachCarousel = () => {
           w="full" // Ensure Flex container takes full width
         >
           {visibleCoaches.map(coach => (
-            <Box minWidth={["100%", "50%", "33.33%", "25%", "20%"]} key={coach.id} mx="0">
+            <Box  key={coach.id} mx="0">
               <CoachCard 
                 name={coach.fullName} 
                 bio={coach.bio} 
