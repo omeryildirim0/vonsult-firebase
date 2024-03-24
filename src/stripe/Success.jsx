@@ -57,6 +57,7 @@ const Success = () => {
   };
 
   const fetchAppointmentDetails = async (appointmentId) => {
+    setLoading(true);
     try {
       const docRef = doc(firestore, "appointments", appointmentId);
       const docSnap = await getDoc(docRef);
@@ -86,7 +87,7 @@ const Success = () => {
 
       // Call removeAvailability with the formatted date and slot.
       await removeAvailability(appointmentDetails.coachId, date, timeSlot);
-      
+      setLoading(false);
     } catch (err) {
       console.error("Error creating Zoom meeting:", err);
       setError("Failed to create meeting. Please try again.");
@@ -94,15 +95,16 @@ const Success = () => {
   };
 
   useEffect(() => {
+    setLoading(true);
     if (appointmentId) {
       fetchAppointmentDetails(appointmentId);
     } else {
-      setLoading(false);
       setError("No appointment ID provided.");
     }
   }, [appointmentId]);
 
   useEffect(() => {
+    setLoading(true);
     const createIfDetailsPresent = async () => {
       // Check if appointmentDetails contains the necessary data
       if (appointmentDetails && appointmentDetails.startTimeISO) {
@@ -123,7 +125,7 @@ const Success = () => {
           coachName: appointmentDetails.coachName,
         });
       }
-      setLoading(false);
+      
     };
 
     createIfDetailsPresent();
@@ -137,7 +139,7 @@ const Success = () => {
         <h1>Meeting Details</h1>
         {meetingLink && (
           <div>
-            <p>Meeting successfully created!</p>
+            <p>Meeting successfully created! A confirmation email containing all the necessary information has been sent to your email address. </p>
             <p>Meeting Link: <a href={meetingLink} target="_blank" rel="noopener noreferrer">{meetingLink}</a></p>
           </div>
         )}
