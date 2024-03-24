@@ -76,6 +76,7 @@ exports.createZoomMeeting = functions.https.onCall(async (data, context) => {
       meetingID: response.data.id,
       joinURL: response.data.join_url,
       start_time: response.data.start_time,
+      startURL: response.data.start_url,
       coachId: coachId,
       coachEmail: data.coachEmail,
       userEmail: data.userEmail,
@@ -227,7 +228,7 @@ Your meeting with ${meetingDetails.coachName} is confirmed. Here are the details
 A new meeting has been scheduled with you. Here are the details:
   - Date: ${meetingDetails.date} 
   - Time: ${meetingDetails.coachTimeSlot} 
-  - Zoom Link: ${meetingDetails.joinURL}
+  - Zoom Link: ${meetingDetails.startURL}
 
   Please be prepared to meet at the scheduled time.
   Vonsult Team
