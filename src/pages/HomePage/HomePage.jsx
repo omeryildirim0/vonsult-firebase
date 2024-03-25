@@ -2,6 +2,7 @@ import React from 'react'
 import HeroSection from '../../components/Hero/Hero'
 import CoachCarousel from '../../components/CoachCarousel/CoachCarousel'
 import HowItWorks from '../../components/HowItWorks/HowItWorks'
+import HowItWorksForCoaches from '../../components/HowItWorks/HowItWorksForCoaches'
 
 
 const HomePage = () => {
@@ -10,6 +11,7 @@ const HomePage = () => {
       <HeroSection />
       <CoachCarousel />
       <HowItWorks />
+      <HowItWorksForCoaches />
     </>
   
   )
