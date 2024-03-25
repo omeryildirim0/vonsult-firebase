@@ -59,7 +59,10 @@ const SignUp = () => {
           bg={useColorModeValue('white', 'gray.700')}
         >
           <Text fontSize="2xl" mb={4} fontWeight="bold" textAlign="center">
-            Join Vonsult as a Coach and Monetize Your Audience
+            Join Vonsult as a Coach
+          </Text>
+          <Text fontSize="lg" mb={4} fontWeight="bold" textAlign="center">
+            Connect with people who need your expertise, give them advice and earn money.
           </Text>
           <Stack spacing={4} align="flex-start">
             <FormControl id="full-name" isRequired>
