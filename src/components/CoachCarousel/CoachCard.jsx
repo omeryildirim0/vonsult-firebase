@@ -12,8 +12,8 @@ const CoachCard = ({ name, bio, imageUrl, hourlyRate, onClick }) => {
       maxWidth="300px"
       onClick={onClick} cursor="pointer"
     >
-      <Image src={imageUrl} alt={name} width="100%" height="auto" />
-      <Box p="4">
+      <Image src={imageUrl} alt={name} width="100%" height="auto" objectFit="cover"/>
+      <Box p="4" minH="160px">
         <Flex alignItems="center" justifyContent="space-between">
           <Flex alignItems="center">
             <Text fontWeight="bold" isTruncated mr="2">
