@@ -98,8 +98,12 @@ const SignUp = () => {
               </NumberInput>
             </FormControl>
             
-            <Button colorScheme="blue" width="full" 
+            <Button 
+              colorScheme="blue" 
+              width="full"
+              isLoading={loading} 
               onClick={() => signup(inputs)}
+              isDisabled={loading}
             >
               Join as a Coach
             </Button>
