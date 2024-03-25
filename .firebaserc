@@ -1,5 +1,9 @@
 {
   "projects": {
-    "default": "vonsult"
-  }
+    "default": "vonsult",
+    "development": "vonsult-development",
+    "production": "vonsult"
+  },
+  "targets": {},
+  "etags": {}
 }
