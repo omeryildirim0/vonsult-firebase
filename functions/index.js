@@ -96,6 +96,9 @@ exports.createZoomMeeting = functions.https.onCall(async (data, context) => {
     const coachDocRef = admin.firestore().collection('coaches').doc(coachId);
     await coachDocRef.collection('meetings').add(meetingData);
 
+    const bookedMeetingsRef = admin.firestore().collection('booked meetings');
+    await bookedMeetingsRef.add(meetingData);
+
     return meetingData;
 
     // return { meetingID: response.data.id, joinURL: response.data.join_url, start_time: response.data.start_time};
