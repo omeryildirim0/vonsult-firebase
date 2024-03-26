@@ -132,21 +132,22 @@ const Success = () => {
   }, [appointmentDetails]); // This useEffect depends on appointmentDetails
 
   if (loading) {
-    return <div>Loading... Please wait while we gather the appointment details and don't refresh the page or go back.</div>;
+    return <div style={{ textAlign: 'center', padding: '50px' }}>Loading... Please wait.</div>;
   } else {
     return (
-      <div>
-        <h1>Meeting Details</h1>
+      <div style={{ margin: '20px', fontFamily: 'Arial, sans-serif' }}>
+        <h1 style={{ color: '#333' }}>Meeting Details</h1>
         {meetingLink && (
-          <div>
-            <p>Meeting successfully created! A confirmation email containing all the necessary information has been sent to your email address. </p>
-            <p>Meeting Link: <a href={meetingLink} target="_blank" rel="noopener noreferrer">{meetingLink}</a></p>
+          <div style={{ background: '#f0f0f0', padding: '20px', borderRadius: '8px' }}>
+            <p>Meeting successfully created! Check your email for details.</p>
+            <p>Meeting Link: <a href={meetingLink} style={{ color: '#0077cc' }} target="_blank" rel="noopener noreferrer">{meetingLink}</a></p>
           </div>
         )}
         {error && <p style={{ color: 'red' }}>{error}</p>}
       </div>
     );
   }
+  
 };
 
 export default Success;
