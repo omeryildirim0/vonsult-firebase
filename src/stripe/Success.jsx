@@ -132,7 +132,7 @@ const Success = () => {
   }, [appointmentDetails]); // This useEffect depends on appointmentDetails
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Loading... Please wait while we gather the appointment details and don't refresh the page or go back.</div>;
   } else {
     return (
       <div>
