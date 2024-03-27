@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { firestore } from '../firebase/firebase';
-import { collection, query, getDocs } from 'firebase/firestore';
+import { collection, query, getDocs, where } from 'firebase/firestore';
 import moment from 'moment-timezone';
 
 const useFetchAvailability = (coachId) => {
@@ -44,7 +44,13 @@ const useFetchAvailability = (coachId) => {
     setIsLoadingAvailabilities(true);
     setFetchError(null);
     try {
-      const q = query(collection(firestore, 'coaches', coachId, 'availability'));
+
+      // Calculate tomorrow's date
+      const tomorrow = moment().add(1, 'days').format('YYYY-MM-DD');
+
+      const q = query(collection(firestore, 'coaches', coachId, 'availability'),
+                    where('__name__', '>=', tomorrow));
+      
       const querySnapshot = await getDocs(q);
       const availabilities = [];
       querySnapshot.forEach((doc) => {
