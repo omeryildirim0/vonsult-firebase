@@ -122,6 +122,9 @@ const CoachPublicProfile = () => {
     // a. Check if the user is authenticated or not.
     setIsLoadingNext(true); // Start loading
     if (!authUser) {
+      
+      localStorage.setItem('postSignInRedirect', window.location.pathname);
+      
       navigate('/sign-in');
       setIsLoadingNext(false); // Stop loading if user is not authenticated
       return;

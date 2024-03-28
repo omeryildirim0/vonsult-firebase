@@ -3,11 +3,13 @@ import useShowToast from "./useShowToast";
 import { auth, firestore } from "../firebase/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import useAuthStore from "../store/authStore";
+import { useNavigate } from "react-router-dom";
 
 const useLogin = () => {
 	const showToast = useShowToast();
 	const [signInWithEmailAndPassword, , loading, error] = useSignInWithEmailAndPassword(auth);
 	const loginUser = useAuthStore((state) => state.login);
+	const navigate = useNavigate();
 
 	const login = async (inputs) => {
 		if (!inputs.email || !inputs.password) {
@@ -25,6 +27,15 @@ const useLogin = () => {
 					// User is a regular user
 					localStorage.setItem("user-info", JSON.stringify(userDocSnap.data()));
 					loginUser(userDocSnap.data());
+
+					const redirectPath = localStorage.getItem('postSignInRedirect');
+					if (redirectPath) {
+						navigate(redirectPath); // Redirect to the saved path
+						localStorage.removeItem('postSignInRedirect'); // Clean up
+					} else {
+						navigate('/'); // or some default path
+					}
+
 				} else {
 					// If not in 'users', check 'coaches'
 					const coachDocRef = doc(firestore, "coaches", userCred.user.uid);
