@@ -57,7 +57,7 @@ const CoachCarousel = () => {
       <Stack spacing={4} align="center" w="full">
         {/* Header */}
         <Heading as="h2" size="xl" textAlign="center">
-          Top Experts at your fingertips
+          Top Influencers at Your Fingertips
         </Heading>
 
         {/* Flex container for cards */}
