@@ -12,7 +12,7 @@ const HowItWorksForCoaches = () => {
       <Flex wrap="wrap" justifyContent="center" alignItems="center">
 
         {/* Become a Coach - Now as a clickable box */}
-        <LinkBox as={Box} p={5} boxShadow="md" borderRadius="lg" m={2} textAlign="center" width={['100%', '100%', '30%']} onClick={() => navigate('/become-a-coach')}>
+        <LinkBox as={Box} p={5} boxShadow="md" borderRadius="lg" m={2} textAlign="center" width={['100%', '100%', '30%']} minHeight={220} onClick={() => navigate('/become-a-coach')}>
           <Icon as={EditIcon} w={10} h={10} color="gray.600" mb={3} />
           <Heading size="md" mb={2}>Become a Coach</Heading>
           <Text fontSize="md">
@@ -22,16 +22,16 @@ const HowItWorksForCoaches = () => {
         </LinkBox>
 
         {/* Add Your Availability */}
-        <Box p={5} boxShadow="md" borderRadius="lg" m={2} textAlign="center" width={['100%', '100%', '30%']}>
+        <Box p={5} boxShadow="md" borderRadius="lg" m={2} textAlign="center" width={['100%', '100%', '30%']} minHeight={220}>
           <Icon as={TimeIcon} w={10} h={10} color="gray.600" mb={3} />
           <Heading size="md" mb={2}>Add Your Availability</Heading>
           <Text fontSize="md">
-            Set up your calendar and let clients know when you’re available for consultations.
+            Set up your calendar and let clients know when you’re available.
           </Text>
         </Box>
 
         {/* Share Your Personal Links */}
-        <Box p={5} boxShadow="md" borderRadius="lg" m={2} textAlign="center" width={['100%', '100%', '30%']}>
+        <Box p={5} boxShadow="md" borderRadius="lg" m={2} textAlign="center" width={['100%', '100%', '30%']} minHeight={220}>
           <Icon as={LinkIcon} w={10} h={10} color="gray.600" mb={3} />
           <Heading size="md" mb={2}>Share Your Links</Heading>
           <Text fontSize="md">

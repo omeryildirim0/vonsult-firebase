@@ -9,7 +9,7 @@ const HowItWorks = () => {
       <Heading textAlign="center">How It Works for Users</Heading>
       <Flex wrap="wrap" justifyContent="center" alignItems="center">
         {/* Find an Expert */}
-        <Box p={5} boxShadow="md" borderRadius="lg" m={2} textAlign="center" width={['100%', '100%', '30%']}>
+        <Box p={5} boxShadow="md" borderRadius="lg" m={2} textAlign="center" width={['100%', '100%', '30%']} minHeight={220}>
           <Icon as={SearchIcon} w={10} h={10} color="gray.600" mb={3} />
           <Heading size="md" mb={2}>Find an Expert</Heading>
           <Text fontSize="md">
@@ -18,7 +18,7 @@ const HowItWorks = () => {
         </Box>
 
         {/* Book a Video Call */}
-        <Box p={5} boxShadow="md" borderRadius="lg" m={2} textAlign="center" width={['100%', '100%', '30%']}>
+        <Box p={5} boxShadow="md" borderRadius="lg" m={2} textAlign="center" width={['100%', '100%', '30%']} minHeight={220}>
           <Icon as={CalendarIcon} w={10} h={10} color="gray.600" mb={3} />
           <Heading size="md" mb={2}>Book a Video Call</Heading>
           <Text fontSize="md">
@@ -27,7 +27,7 @@ const HowItWorks = () => {
         </Box>
 
         {/* Virtual Consultation */}
-        <Box p={5} boxShadow="md" borderRadius="lg" m={2} textAlign="center" width={['100%', '100%', '30%']}>
+        <Box p={5} boxShadow="md" borderRadius="lg" m={2} textAlign="center" width={['100%', '100%', '30%']} minHeight={220}>
           <Icon as={PhoneIcon} w={10} h={10} color="gray.600" mb={3} /> {/* Use an icon that represents video calls */}
           <Heading size="md" mb={2}>Virtual Consultation</Heading>
           <Text fontSize="md">
