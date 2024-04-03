@@ -12,6 +12,8 @@ import CoachPublicProfile from "./pages/CoachPublicProfile/CoachPublicProfile"
 import CheckoutForm from "./stripe/CheckoutForm"
 import Return from "./stripe/Return"
 import Success from "./stripe/Success"
+import BlogMainPage from "./pages/Blog/BlogMain"
+import ArticlePage from "./pages/Blog/ArticlePage"
 
 function App() {
   const [authUser] = useAuthState(auth);
@@ -26,6 +28,8 @@ function App() {
         <Route path="/become-a-coach" element={<BecomeACoach />} />
         <Route path="/dashboard" element={authUser ? <Dashboard /> : <Navigate to="/" />} />
         <Route path="/coach/:coachId" element={<CoachPublicProfile />} />
+        <Route path="/blog" element={<BlogMainPage />} />
+        <Route path="/blog/:articleId" element={<ArticlePage />} />
 
         <Route path="/success" element={<Success />} />
         <Route path="/checkout" element={<CheckoutForm />} />
