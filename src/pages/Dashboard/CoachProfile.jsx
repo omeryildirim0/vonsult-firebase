@@ -20,6 +20,7 @@ import {
   FormControl,
   FormLabel, 
   Textarea,
+  Link
 } from '@chakra-ui/react';
 import { auth, firestore } from '../../firebase/firebase'; // ensure you have the correct path
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
@@ -79,7 +80,14 @@ const EditProfileModal = ({ isOpen, onClose, initialRef, finalRef, coachProfile,
               />
             </FormControl>
           </ModalBody>
-
+          
+          <Text fontSize="sm" mt={4} textAlign="center">
+            If you need to change the price or your photo, please contact us directly at {" "}
+            <Link href="mailto:support@vonsult.com" fontWeight="bold" isExternal>
+              support@vonsult.com
+            </Link>
+          </Text>
+          
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={handleSubmit}>
               Save
