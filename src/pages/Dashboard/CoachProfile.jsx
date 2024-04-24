@@ -237,7 +237,7 @@ const CoachProfile = () => {
           />
         )}
         <Text fontWeight="bold">{coachProfile?.fullName || 'Coach Name'}</Text>
-        <Text fontSize="sm" color="gray.500">{coachProfile?.expertise || 'Expertise Area'}</Text>
+
         <Text fontSize="sm">{coachProfile?.bio || 'Bio description...'}</Text>
         <HStack justify="center" mt={4}>
           <Button size="sm" colorScheme="blue" onClick={onOpen}>Edit Profile</Button>
