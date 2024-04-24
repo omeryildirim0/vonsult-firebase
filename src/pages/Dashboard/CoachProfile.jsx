@@ -35,6 +35,8 @@ const EditProfileModal = ({ isOpen, onClose, initialRef, finalRef, coachProfile,
     // Add other fields that you need to edit
   });
   const [file, setFile] = React.useState(null);
+  const [isSaving, setIsSaving] = React.useState(false);
+
 
   React.useEffect(() => {
     // Update the local state whenever the coachProfile prop updates
@@ -55,15 +57,23 @@ const EditProfileModal = ({ isOpen, onClose, initialRef, finalRef, coachProfile,
   };
 
   const handleSubmit = async () => {
-    if (file) {
-      const storageRef = ref(storage, `profilePictures/${coachProfile.uid}`);
-      await uploadBytes(storageRef, file);
-      const photoURL = await getDownloadURL(storageRef);
-      localProfile.profilePic = photoURL;
+    setIsSaving(true); // Start saving and indicate loading
+    try {
+      if (file) {
+        const storageRef = ref(storage, `profilePictures/${coachProfile.uid}`);
+        await uploadBytes(storageRef, file);
+        const photoURL = await getDownloadURL(storageRef);
+        localProfile.profilePic = photoURL;
+      }
+      await updateCoachProfile(localProfile);
+      onClose();
+    } catch (error) {
+      console.error("Error during profile update:", error);
+    } finally {
+      setIsSaving(false); // End saving, regardless of outcome
     }
-    updateCoachProfile(localProfile);
-    onClose();
   };
+  
 
   return (
     <>
@@ -107,7 +117,7 @@ const EditProfileModal = ({ isOpen, onClose, initialRef, finalRef, coachProfile,
           </Text>
           
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={handleSubmit}>
+            <Button colorScheme="blue" mr={3} onClick={handleSubmit} isLoading={isSaving}>
               Save
             </Button>
             <Button onClick={onClose}>Cancel</Button>
