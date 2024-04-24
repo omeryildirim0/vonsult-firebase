@@ -120,7 +120,7 @@ const EditProfileModal = ({ isOpen, onClose, initialRef, finalRef, coachProfile,
             <Button colorScheme="blue" mr={3} onClick={handleSubmit} isLoading={isSaving}>
               Save
             </Button>
-            <Button onClick={onClose}>Cancel</Button>
+            <Button onClick={onClose} isDisabled={isSaving}>Cancel</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
