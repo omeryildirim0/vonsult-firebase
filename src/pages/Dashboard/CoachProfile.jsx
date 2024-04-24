@@ -22,15 +22,19 @@ import {
   Textarea,
   Link
 } from '@chakra-ui/react';
-import { auth, firestore } from '../../firebase/firebase'; // ensure you have the correct path
+import { auth, firestore, storage } from '../../firebase/firebase'; // ensure you have the correct path
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
 
 const EditProfileModal = ({ isOpen, onClose, initialRef, finalRef, coachProfile, updateCoachProfile }) => {
   const [localProfile, setLocalProfile] = React.useState({
     fullName: '',
     bio: '',
+    profilePic: null,
     // Add other fields that you need to edit
   });
+  const [file, setFile] = React.useState(null);
 
   React.useEffect(() => {
     // Update the local state whenever the coachProfile prop updates
@@ -40,16 +44,25 @@ const EditProfileModal = ({ isOpen, onClose, initialRef, finalRef, coachProfile,
   }, [coachProfile]);
 
   const handleChange = (e) => {
-    setLocalProfile({
-      ...localProfile,
-      [e.target.name]: e.target.value
-    });
+    if (e.target.type === 'file') {
+      setFile(e.target.files[0]);
+    } else {
+      setLocalProfile({
+        ...localProfile,
+        [e.target.name]: e.target.value
+      });
+    }
   };
 
-  const handleSubmit = () => {
-    // Function to update the profile
+  const handleSubmit = async () => {
+    if (file) {
+      const storageRef = ref(storage, `profilePictures/${coachProfile.uid}`);
+      await uploadBytes(storageRef, file);
+      const photoURL = await getDownloadURL(storageRef);
+      localProfile.profilePic = photoURL;
+    }
     updateCoachProfile(localProfile);
-    onClose(); // Close the modal
+    onClose();
   };
 
   return (
@@ -79,10 +92,15 @@ const EditProfileModal = ({ isOpen, onClose, initialRef, finalRef, coachProfile,
                 onChange={handleChange}
               />
             </FormControl>
+
+            <FormControl mt={4}>
+              <FormLabel>Profile Picture</FormLabel>
+              <Input type="file" onChange={handleChange} />
+            </FormControl>
           </ModalBody>
           
           <Text fontSize="sm" mt={4} textAlign="center">
-            If you need to change the price or your photo, please contact us directly at {" "}
+            If you need to change the price, please contact us directly at {" "}
             <Link href="mailto:support@vonsult.com" fontWeight="bold" isExternal>
               support@vonsult.com
             </Link>
