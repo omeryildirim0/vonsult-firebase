@@ -14,6 +14,7 @@ import Return from "./stripe/Return"
 import Success from "./stripe/Success"
 import BlogMainPage from "./pages/Blog/BlogMain"
 import ArticlePage from "./pages/Blog/ArticlePage"
+import CoachesInfo from "./pages/BecomeACoach/CoachesInfo"
 
 function App() {
   const [authUser] = useAuthState(auth);
@@ -28,6 +29,8 @@ function App() {
         <Route path="/become-a-coach" element={<BecomeACoach />} />
         <Route path="/dashboard" element={authUser ? <Dashboard /> : <Navigate to="/" />} />
         <Route path="/coach/:coachId" element={<CoachPublicProfile />} />
+        <Route path="/coachesinfo" element={<CoachesInfo />} />
+
         <Route path="/blog" element={<BlogMainPage />} />
         <Route path="/blog/:articleId" element={<ArticlePage />} />
 
