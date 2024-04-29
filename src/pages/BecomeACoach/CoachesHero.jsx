@@ -1,5 +1,5 @@
 import { Box, Flex, Button, Heading, Text, Image, useBreakpointValue } from '@chakra-ui/react';
-import coachhero from '../../assets/coachhero.jpg';
+import coachhero from '../../assets/coachhero1.jpg';
 
 const CoachesHero = () => {
     const headingSize = useBreakpointValue({ base: 'md', md: 'xl', lg: '2xl' });
