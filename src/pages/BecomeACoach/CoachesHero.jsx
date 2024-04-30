@@ -28,7 +28,7 @@ const CoachesHero = () => {
           mb="4"
           color={"black"}
         >
-          Connect with Your Followers Virtually, Give Them 1-on-1 Advice, and Earn Money
+          Connect with Your Followers Virtually, Give Them Advice, and Earn Money
         </Heading>
         <Text
           fontSize={{ base: 'md', md: 'lg' }}
@@ -36,8 +36,9 @@ const CoachesHero = () => {
           maxW="2xl"
           mb="8"
           fontWeight="bold"
+          color={"black"}
         >
-          
+          Turn your expertise into income by connecting directly with your followers.
         </Text>
         <Button
             size={buttonSize}
