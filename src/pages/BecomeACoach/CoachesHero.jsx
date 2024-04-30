@@ -1,11 +1,14 @@
 import { Box, Flex, Button, Heading, Text, Image, useBreakpointValue } from '@chakra-ui/react';
 import coachhero from '../../assets/coachhero1.jpg';
+import { useNavigate } from 'react-router-dom';
+
 
 const CoachesHero = () => {
     const headingSize = useBreakpointValue({ base: 'md', md: 'xl', lg: '2xl' });
   
     // This will determine the size of the button based on the current breakpoint
     const buttonSize = useBreakpointValue({ base: 'sm', md: 'md' });
+    const navigate = useNavigate();
   
     return (
       <Flex
@@ -45,6 +48,7 @@ const CoachesHero = () => {
             size={buttonSize}
             colorScheme="teal" // Change color scheme according to your brand's theme
             mb={{ base: '4', md: '8' }}
+            onClick={() => navigate('/become-a-coach')} // Navigate to the "Become a Coach" page
         >
             Become a Coach
         </Button>
