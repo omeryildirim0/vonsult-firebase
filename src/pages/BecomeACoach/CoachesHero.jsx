@@ -26,6 +26,7 @@ const CoachesHero = () => {
           fontWeight="bold"
           textAlign="center"
           mb="4"
+          mt="4"
           color={"black"}
         >
           Connect with Your Followers Virtually, Give Them Advice, and Earn Money
