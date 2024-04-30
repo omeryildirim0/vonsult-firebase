@@ -128,16 +128,24 @@ const Navbar = () => {
           </Menu>
         ) : (
           <>
-          <Button colorScheme="blue" variant="ghost" mr={3} onClick={() => navigate('/coachesinfo')}>
-            Become a Coach
-          </Button>
-          <Button colorScheme="blue" display={{ base: 'none', md: 'inline-flex' }}
+            <Button 
+              colorScheme="blue" 
+              variant="ghost" 
+              mr={3} 
+              onClick={() => navigate('/coachesinfo')}
+              display={{ base: 'none', md: 'inline-flex' }}
+            >
+              Become a Coach
+            </Button>
+            <Button 
+              colorScheme="blue" 
+              
               onClick={() => navigate('/sign-in')}
-          >
-          Sign In
-        </Button>
+            >
+              Sign In
+            </Button>
         
-        </>
+          </>
         )}
         
       </Flex>
