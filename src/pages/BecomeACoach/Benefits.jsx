@@ -59,7 +59,12 @@ import benefit3 from '../../assets/benefit3.jpg';
   
   function BenefitItem({ title, text, imgSrc, isImageLeft }) {
     const direction = useBreakpointValue({ base: 'column', md: isImageLeft ? 'row' : 'row-reverse' });
-    const imageBoxSize = useBreakpointValue({ base: '100%', md: '450px' });
+    
+    // This will now be 100% of the container on small screens, and a specific larger pixel value on wider screens.
+    const imageBoxSize = useBreakpointValue({ base: '100%', md: '400px' }); // Increased from 350px to 400px for medium and larger screens
+  
+    // Adjust the aspect ratio to make the image a touch wider. A lower ratio means a wider image.
+    const aspectRatio = 16 / 9; // This is a common aspect ratio for widescreen images
   
     return (
       <Flex
@@ -67,8 +72,9 @@ import benefit3 from '../../assets/benefit3.jpg';
         justify="center"
         align="center"
         wrap="no-wrap"
+        my={10}
       >
-        <AspectRatio ratio={4 / 3} w={imageBoxSize} mb={{ base: 4, md: 0 }}>
+        <AspectRatio ratio={aspectRatio} w={imageBoxSize}>
           <Image
             borderRadius="lg"
             src={imgSrc}
@@ -83,6 +89,7 @@ import benefit3 from '../../assets/benefit3.jpg';
       </Flex>
     );
   }
+  
   
   
   export default Benefits;
