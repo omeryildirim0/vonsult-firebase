@@ -28,6 +28,7 @@ const HeroSection = () => {
         fontWeight="bold"
         textAlign="center"
         mb="4"
+        textShadow="2px 2px 5px black" // Adds shadow to text
       >
         Your Growth Journey Starts Here
       </Heading>
@@ -35,13 +36,23 @@ const HeroSection = () => {
         fontSize={{ base: 'md', md: 'lg' }}
         textAlign="center"
         maxW="2xl"
-        mb="8"
+        mb="4"
         fontWeight="bold"
+        textShadow="1px 1px 3px black" // Adds shadow to text
       >
-        We are a new startup where you can book 1-on-1 sessions with renowned influencers from different fields and ask them questions to get help. 
-        At Vonsult, we are committed to bridging the gap between creativity and expertise. Start your journey today!
+        We are a new startup where you can book 1-on-1 sessions with renowned influencers who specialize in fields such as fitness, fashion, style and content creation, and ask them questions to get advice. 
+        At Vonsult, we are committed to bridging the gap between creativity and expertise.
       </Text>
-      
+
+      <Text
+        fontSize={{ base: 'lg', md: 'xl' }}
+        fontWeight="bold"
+        mb="4"
+        textAlign="center"
+        textShadow="1px 1px 3px black"
+      >
+        Start your journey today!
+      </Text>
      
     </Flex>
   );
