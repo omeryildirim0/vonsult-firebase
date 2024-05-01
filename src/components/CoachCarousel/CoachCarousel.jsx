@@ -52,7 +52,12 @@ const CoachCarousel = React.forwardRef((props, ref) => {
   return (
     <Center ref={ref} w="full" mt="4">
       <Stack spacing={4} align="center" w="full">
-        <Heading as="h2" size="xl" textAlign="center">
+        <Heading as="h2" size="xl" textAlign="center"
+          bgClip="text"
+          fontWeight="bold"
+          bgGradient="linear(to-l, #7928CA, #FF0080)"
+          color="transparent"
+        >
           Top Influencers at Your Fingertips
         </Heading>
         <Flex

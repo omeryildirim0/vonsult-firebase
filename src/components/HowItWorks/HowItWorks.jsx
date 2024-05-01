@@ -6,7 +6,14 @@ import { SearchIcon, CalendarIcon, PhoneIcon } from '@chakra-ui/icons';
 const HowItWorks = () => {
   return (
     <VStack spacing={8} align="stretch" m={5}>
-      <Heading textAlign="center">How It Works for Users</Heading>
+      <Heading as="h2" size="xl" textAlign="center"
+          bgClip="text"
+          fontWeight="bold"
+          bgGradient="linear(to-l, #7928CA, #FF0080)"
+          color="transparent"
+      >
+        How It Works for Users
+      </Heading>
       <Flex wrap="wrap" justifyContent="center" alignItems="center">
         {/* Find an Expert */}
         <Box p={5} boxShadow="md" borderRadius="lg" m={2} textAlign="center" width={['100%', '100%', '30%']} minHeight={220}>

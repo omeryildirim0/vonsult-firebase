@@ -8,7 +8,14 @@ const HowItWorksForCoaches = () => {
 
   return (
     <VStack spacing={8} align="stretch" m={5}>
-      <Heading textAlign="center">For Coaches</Heading>
+      <Heading as="h2" size="xl" textAlign="center"
+          bgClip="text"
+          fontWeight="bold"
+          bgGradient="linear(to-l, #7928CA, #FF0080)"
+          color="transparent"
+      >
+        For Coaches
+      </Heading>
       <Flex wrap="wrap" justifyContent="center" alignItems="center">
 
         {/* Become a Coach - Now as a clickable box */}
