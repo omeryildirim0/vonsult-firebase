@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Flex, Heading, Text, Button, useBreakpointValue, keyframes } from '@chakra-ui/react';
+import { Flex, Heading, Text, Button, useBreakpointValue, keyframes } from '@chakra-ui/react';
 
 // Define the gradient shift animation for the background
 const gradientShift = keyframes`
@@ -8,26 +8,16 @@ const gradientShift = keyframes`
   100% { background-position: 0% 50% }
 `;
 
-// Define the slide-in text animation for the main content
-const slideInFromRight = keyframes`
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-    width: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-    width: 100%;
-  }
-`;
-
-const HeroSection = () => {
+const HeroSection = ({ scrollToRef }) => {
   const headingSize = useBreakpointValue({ base: 'xl', md: '2xl', lg: '3xl' });
   const textSize = useBreakpointValue({ base: 'sm', md: 'md', lg: 'lg' });
   const buttonSize = useBreakpointValue({ base: 'sm', md: 'md', lg: 'lg' });
 
   const background = `linear-gradient(270deg, #FFD700, #FF6347, #40E0D0, #FF69B4, #BA55D3)`;
+
+  const handleExploreClick = () => {
+    scrollToRef.current.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <Flex
@@ -63,7 +53,6 @@ const HeroSection = () => {
         lineHeight="tall"
         overflow="hidden"
         whiteSpace="normal"
-        animation={`${slideInFromRight} 2s ease-out forwards`}
       >
         We are a new startup where you can book 1-on-1 sessions with renowned influencers who specialize in fields such as fitness, fashion, style, and content creation, and ask them questions to get advice. At Vonsult, we are committed to bridging the gap between creativity and expertise.
       </Text>
@@ -79,6 +68,7 @@ const HeroSection = () => {
         px="8"
         py="4"
         boxShadow="0px 0px 8px white"
+        onClick={handleExploreClick}
       >
         Explore Now
       </Button>
