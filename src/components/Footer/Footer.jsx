@@ -1,7 +1,10 @@
 import { Box, Container, Stack, Text, Link, useColorModeValue } from '@chakra-ui/react';
 import { FaInstagram, FaTwitter, FaYoutube } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 
 const Footer = () => {
+  const navigate = useNavigate();
+
   return (
     <Box
       bg={useColorModeValue('gray.50', 'gray.900')}
@@ -9,7 +12,7 @@ const Footer = () => {
       <Container as={Stack} maxW={'6xl'} py={4} spacing={4} justify={'center'} align={'center'}>
         <Stack direction={'row'} spacing={6}>
           <Link href={'#'}>Home</Link>
-          <Link href={'#'}>About</Link>
+          <Link href={'/about'}>About</Link>
           <Link href={'#'}>Blog</Link>
           <Link href="mailto:support@vonsult.com" isExternal>Contact</Link>
         </Stack>
