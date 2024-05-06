@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useBreakpointValue } from "@chakra-ui/media-query";
+import React, { useState } from "react";
 import { Flex, Box, Center, Heading, Stack } from "@chakra-ui/react";
 import CoachCard from "./CoachCard"; // Adjust the path as necessary
 import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
@@ -19,7 +18,7 @@ const CoachCarousel = React.forwardRef((props, ref) => {
     {
       id: 'U7gtNlVwUgRk7U9tBjP54tLdJLn2',
       fullName: 'Cecilie Moessle',
-      bio: 'My name is Cecilie, I am 25 years old and I am a content creator. I have been working with social media for 4 years now wether it was my own account or a brands account. Through hard work and a lot of research I have mastered the game of social media growth and grew my account up to 50K followers, so I am here to help you. But what can you learn from me? I talk about how to get viral, what to look for to achieve the best results, how to grow a community and much more. I cannot wait to work with you and see your success.',
+      bio: 'My name is Cecilie, I am 25 years old and I am a content creator. I have been working with social media for 4 years now whether it was my own account or a brand’s account. Through hard work and a lot of research I have mastered the game of social media growth and grew my account up to 50K followers, so I am here to help you. But what can you learn from me? I talk about how to get viral, what to look for to achieve the best results, how to grow a community and much more. I cannot wait to work with you and see your success.',
       profilePicURL: cecilieImage,
       hourlyRate: '90'
     },
@@ -33,20 +32,13 @@ const CoachCarousel = React.forwardRef((props, ref) => {
     {
       id: 'z3wZeF0KVneNYLemioBYkVsOBUs2',
       fullName: 'Jenna Robins',
-      bio: 'My name is Jenna and I am a content-creator, business owner and new-mom from Toronto,Canada! I started my social media journey on Instagram in 2018, and have recently expanded to TikTok. I now have a highly engaged following of 64k! I love creating organic photo and video content that focuses on travel (i.e., what to do, where to eat, where to stay, etc.), home (i.e., DIY projects, home inspiration, must-have products, etc.) and life as new parents (i.e., daily vlogs, baby products, etc.) I am grateful to have had the opportunity to work with a variety of different businesses and look forward to establishing more authentic partnerships in the future.'      ,
+      bio: 'My name is Jenna and I am a content-creator, business owner and new-mom from Toronto, Canada! I started my social media journey on Instagram in 2018, and have recently expanded to TikTok. I now have a highly engaged following of 64k! I love creating organic photo and video content that focuses on travel (i.e., what to do, where to eat, where to stay, etc.), home (i.e., DIY projects, home inspiration, must-have products, etc.) and life as new parents (i.e., daily vlogs, baby products, etc.) I am grateful to have had the opportunity to work with a variety of different businesses and look forward to establishing more authentic partnerships in the future.',
       profilePicURL: jennaImage,
       hourlyRate: '90'
     }
   ];
 
-  // No need to shuffle as these are hardcoded
-  const [coaches, setCoaches] = useState(hardcodedCoaches);
-
-  // Define how many cards to show based on the current breakpoint
-  const cardsToShow = useBreakpointValue({ base: 1, sm: 2, md: 2, lg: 3, xl: 4 });
-
-  // Function to slice the array of coaches based on the cardsToShow value
-  const visibleCoaches = coaches.slice(0, cardsToShow);
+  const [coaches] = useState(hardcodedCoaches);
 
   return (
     <Center ref={ref} w="full" mt="4">
@@ -61,14 +53,16 @@ const CoachCarousel = React.forwardRef((props, ref) => {
         </Heading>
         <Flex
           direction="row"
-          overflowX="scroll"
+          overflowX="auto"
           wrap="nowrap"
-          justifyContent="center"
+          justifyContent="space-around" // Distributes space around items
           align="center"
           w="full"
         >
-          {visibleCoaches.map(coach => (
-            <Box key={coach.id} mx="0">
+
+
+          {coaches.map(coach => (
+            <Box key={coach.id} mx="2">
               <CoachCard 
                 name={coach.fullName} 
                 bio={coach.bio} 
