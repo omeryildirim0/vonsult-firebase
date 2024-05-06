@@ -22,7 +22,7 @@ const CoachCard = ({ name, bio, imageUrl, hourlyRate, onClick }) => {
             <CheckIcon color="green.500" /> {/* Verified tick next to the name */}
           </Flex>
           <Badge colorScheme="blue" px="2" borderRadius="full">
-            Top Expert
+            Top Coach
           </Badge>
         </Flex>
         <Text color="gray.500" fontSize="sm" noOfLines={2} mt="2">

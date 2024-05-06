@@ -1,50 +1,49 @@
 import React, { useState, useEffect } from "react";
 import { useBreakpointValue } from "@chakra-ui/media-query";
-import { firestore } from "../../firebase/firebase"; // Adjust the path as necessary
-import { collection, getDocs } from "firebase/firestore";
 import { Flex, Box, Center, Heading, Stack } from "@chakra-ui/react";
 import CoachCard from "./CoachCard"; // Adjust the path as necessary
 import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
+import omerImage from './coachAssets/omer.jpg';
+import cecilieImage from './coachAssets/cecilie.jpeg';
+import jennaImage from './coachAssets/jenna.jpeg';
 
 const CoachCarousel = React.forwardRef((props, ref) => {
-  const [coaches, setCoaches] = useState([]);
   const navigate = useNavigate();
 
   const handleCardClick = (coachId) => {
     navigate(`/coach/${coachId}`);
   };
 
-  function shuffleArray(array) {
-    let currentIndex = array.length, randomIndex;
-  
-    // While there remain elements to shuffle...
-    while (currentIndex !== 0) {
-  
-      // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
-  
-      // And swap it with the current element.
-      [array[currentIndex], array[randomIndex]] = [
-        array[randomIndex], array[currentIndex]];
+  // Example hardcoded data
+  const hardcodedCoaches = [
+    {
+      id: 'U7gtNlVwUgRk7U9tBjP54tLdJLn2',
+      fullName: 'Cecilie Moessle',
+      bio: 'My name is Cecilie, I am 25 years old and I am a content creator. I have been working with social media for 4 years now wether it was my own account or a brands account. Through hard work and a lot of research I have mastered the game of social media growth and grew my account up to 50K followers, so I am here to help you. But what can you learn from me? I talk about how to get viral, what to look for to achieve the best results, how to grow a community and much more. I cannot wait to work with you and see your success.',
+      profilePicURL: cecilieImage,
+      hourlyRate: '90'
+    },
+    {
+      id: 'rq10VzBTpobFKCCjhm8Or3lkhSn1',
+      fullName: 'Omer Yildirim',
+      bio: 'Law student turned entrepreneur. Founder of this app. Vonsult is more than just a platform; it is a testament to my belief in the power of dialogue, mentorship, and the exchange of ideas across disciplines. By facilitating one-on-one sessions with renowned experts from various fields, I aim to empower individuals to seek answers, challenge conventions, and pursue their passions with confidence.',
+      profilePicURL: omerImage,
+      hourlyRate: '100'
+    },
+    {
+      id: 'z3wZeF0KVneNYLemioBYkVsOBUs2',
+      fullName: 'Jenna Robins',
+      bio: 'My name is Jenna and I am a content-creator, business owner and new-mom from Toronto,Canada! I started my social media journey on Instagram in 2018, and have recently expanded to TikTok. I now have a highly engaged following of 64k! I love creating organic photo and video content that focuses on travel (i.e., what to do, where to eat, where to stay, etc.), home (i.e., DIY projects, home inspiration, must-have products, etc.) and life as new parents (i.e., daily vlogs, baby products, etc.) I am grateful to have had the opportunity to work with a variety of different businesses and look forward to establishing more authentic partnerships in the future.'      ,
+      profilePicURL: jennaImage,
+      hourlyRate: '90'
     }
-  
-    return array;
-  }
+  ];
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const querySnapshot = await getDocs(collection(firestore, "coaches"));
-      const coachesData = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      const shuffledCoaches = shuffleArray(coachesData);
-      setCoaches(shuffledCoaches);
-    };
-  
-    fetchData();
-  }, []);
+  // No need to shuffle as these are hardcoded
+  const [coaches, setCoaches] = useState(hardcodedCoaches);
 
   // Define how many cards to show based on the current breakpoint
-  const cardsToShow = useBreakpointValue({ base: 1, sm: 2, md: 3, lg: 4, xl: 5 });
+  const cardsToShow = useBreakpointValue({ base: 1, sm: 2, md: 2, lg: 3, xl: 4 });
 
   // Function to slice the array of coaches based on the cardsToShow value
   const visibleCoaches = coaches.slice(0, cardsToShow);
