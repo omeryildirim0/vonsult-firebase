@@ -49,6 +49,10 @@ const CoachPublicProfile = () => {
     fetchCoachAndPrice();
   }, [coachId]);
 
+  // Helper function to check if there are any available time slots
+  const hasAvailableSlots = (availabilities) => {
+    return availabilities.some(availability => availability.timeSlots.length > 0);
+  };
 
   const getUserTimezone = () => {
     return moment.tz.guess();
@@ -214,16 +218,16 @@ const CoachPublicProfile = () => {
             <Text>Loading...</Text>
           ) : fetchError ? (
             <Text color="red.500">Error: {fetchError.message}</Text>
-          ) : (
-            fetchedAvailabilities.map((availability) => (
-              availability.timeSlots.length === 0 ? null : (
+          ) : hasAvailableSlots(fetchedAvailabilities) ? (
+            fetchedAvailabilities.map((availability) =>
+              availability.timeSlots.length > 0 && (
                 <Box key={availability.id} p={2} border="1px solid" borderColor="gray.200" borderRadius="md">
                   <Text fontWeight="bold">{moment(availability.id).format('LL')}</Text>
                   <HStack wrap="wrap" spacing={4}>
                     {availability.timeSlots.map((timeSlot) => (
                       <Button 
-                        size="md" 
-                        key={`${availability.id}-${timeSlot}`} 
+                        size="md"
+                        key={`${availability.id}-${timeSlot}`}
                         borderRadius="full" 
                         m={1}
                         bg={selectedTimeSlot === `${availability.id}-${timeSlot}` ? 'teal.500' : 'gray.200'}
@@ -239,9 +243,10 @@ const CoachPublicProfile = () => {
                   </HStack>
                 </Box>
               )
-            ))
+            )
+          ) : (
+            <Text>All the sessions for this coach are sold out! Please check back later!</Text>
           )}
-
         </Box>
 
         <Box mt={4}>
